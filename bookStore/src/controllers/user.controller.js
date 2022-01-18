@@ -78,6 +78,41 @@ export const register = async (req, res, next) => {
 };
 
 /**
+ * Controller to Login Admin and User
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+ export const login = async (req, res, next) => {
+  try {
+    const info = {
+      email: req.body.email,
+      password: req.body.password
+    }
+    const data = await UserService.login(info);
+    if (data == "Not Registered Yet") {
+      res.status(HttpStatus.NOT_FOUND).json({
+        code: HttpStatus.NOT_FOUND,
+        message: 'Not Registered Yet'
+      });
+    } else if (data == "Incorrect Password") {
+      res.status(HttpStatus.UNAUTHORIZED).json({
+        code: HttpStatus.UNAUTHORIZED,
+        message: 'Incorrect Password'
+      });
+    } else {
+      res.status(HttpStatus.OK).json({
+        code: HttpStatus.OK,
+        message: 'Login Successful',
+        token: data
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Controller to update a user
  * @param  {object} req - request object
  * @param {object} res - response object

@@ -14,6 +14,9 @@ router.post('/admin', Validator, setRole('Admin'), userController.register);
 //route to create a new User
 router.post('/user', Validator, setRole('User'), userController.register);
 
+//route to login user or Admin
+router.post('/login', userController.login);
+
 //route to get a single user by their user id
 router.get('/:_id', userAuth, userController.getUser);
 

@@ -1,5 +1,6 @@
 import User from '../models/user.model';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 //get all users
 export const getAllUsers = async () => {
@@ -17,6 +18,22 @@ export const register = async (info) => {
     return data;
   } else {
     return null;
+  }
+};
+
+//Login Admin or User
+export const login = async (info) => {
+  const userPresent = await User.findOne({ email:info.email });
+  if (userPresent) {
+    const match = await bcrypt.compare(info.password, userPresent.password);
+    if (match) {
+      const token = jwt.sign({email:userPresent.email, id: userPresent._id, role: userPresent.role},process.env.SECRET_KEY);
+      return token;
+    } else {
+      return "Incorrect Password"
+    }
+  } else {
+    return "Not Registered Yet";
   }
 };
 

@@ -28,7 +28,9 @@ router.get('', userController.getAllUsers); //route to create a new Admin
 
 router.post('/admin', _user2.Validator, (0, _auth.setRole)('Admin'), userController.register); //route to create a new User
 
-router.post('/user', _user2.Validator, (0, _auth.setRole)('User'), userController.register); //route to get a single user by their user id
+router.post('/user', _user2.Validator, (0, _auth.setRole)('User'), userController.register); //route to login user or Admin
+
+router.post('/login', userController.login); //route to get a single user by their user id
 
 router.get('/:_id', _auth.userAuth, userController.getUser); //route to update a single user by their user id
 
