@@ -1,6 +1,6 @@
 import express from 'express';
 import * as userController from '../controllers/user.controller';
-import { Validator } from '../validators/user.validator';
+import { Validator,resetPasswordValidator } from '../validators/user.validator';
 import { userAuth, setRole } from '../middlewares/auth.middleware';
 
 const router = express.Router();
@@ -19,6 +19,9 @@ router.post('/login', userController.login);
 
 //route to forgotPassword
 router.post('/forgotpassword',userController.forgotPassword);
+
+//route to resetPassword
+router.post('/resetpassword',resetPasswordValidator, userController.resetPassword);
 
 //route to get a single user by their user id
 router.get('/:_id', userAuth, userController.getUser);

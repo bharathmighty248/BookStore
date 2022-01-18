@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.sendResetEmail = void 0;
+exports.sendSuccessEmail = exports.sendResetEmail = void 0;
 
 var _nodemailer = _interopRequireDefault(require("nodemailer"));
 
@@ -47,5 +47,22 @@ var sendResetEmail = function sendResetEmail(details) {
   });
   code.save();
 };
+/**
+ * utility to sendSuccessEmail
+ *
+ * @param {object} details
+ */
+
 
 exports.sendResetEmail = sendResetEmail;
+
+var sendSuccessEmail = function sendSuccessEmail(details) {
+  transporter.sendMail({
+    from: "'Book-Store'<bookstore-account@bookstore.com>",
+    to: details,
+    subject: "Password reset successfull",
+    text: "Your Password reset is successfull. Use this new password for future actions"
+  });
+};
+
+exports.sendSuccessEmail = sendSuccessEmail;

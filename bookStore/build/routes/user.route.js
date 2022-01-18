@@ -32,7 +32,9 @@ router.post('/user', _user2.Validator, (0, _auth.setRole)('User'), userControlle
 
 router.post('/login', userController.login); //route to forgotPassword
 
-router.post('/forgotpassword', userController.forgotPassword); //route to get a single user by their user id
+router.post('/forgotpassword', userController.forgotPassword); //route to resetPassword
+
+router.post('/resetpassword', _user2.resetPasswordValidator, userController.resetPassword); //route to get a single user by their user id
 
 router.get('/:_id', _auth.userAuth, userController.getUser); //route to update a single user by their user id
 

@@ -141,6 +141,36 @@ export const register = async (req, res, next) => {
 };
 
 /**
+ * Controller to ResetPassword
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+ export const resetPassword = async (req, res, next) => {
+  try {
+    const info = {
+      email: req.body.email,
+      newPassword: req.body.newPassword,
+      resetcode: req.body.resetcode
+    }
+    const data = await UserService.resetPassword(info);
+    if (data == "code expired") {
+      res.status(HttpStatus.NOT_FOUND).json({
+        code: HttpStatus.NOT_FOUND,
+        message: 'Reset-code is expired, Request new Reset-code'
+      });
+    } else {
+      res.status(HttpStatus.OK).json({
+        code: HttpStatus.OK,
+        message: 'Password reset successfull'
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Controller to update a user
  * @param  {object} req - request object
  * @param {object} res - response object

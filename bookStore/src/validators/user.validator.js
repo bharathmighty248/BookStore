@@ -30,3 +30,28 @@ export const Validator = (req, res, next) => {
     next();
   }
 };
+
+export const resetPasswordValidator = (req, res, next) => {
+  const schema = Joi.object({
+    email: Joi.string()
+      .required()
+      .pattern(
+        new RegExp(
+          '[a-zA-Z]+[+_.-]{0,1}[0-9a-zA-Z]+[@][a-zA-Z0-9]+[.][a-zA-Z]{2,3}([.][a-zA-Z]{2,3}){0,1}'
+        )
+      ),
+    newPassword: Joi.string()
+      .required()
+      .pattern(new RegExp('[A-Za-z]{3,}[$&=?@#|*%!]{1,}[0-9]{1,}')),
+    resetcode: Joi.string()
+      .required()
+      .pattern(new RegExp('[0-9a-zA-Z]'))
+  });
+  const { error, value } = schema.validate(req.body);
+  if (error) {
+    next(error);
+  } else {
+    req.validatedBody = value;
+    next();
+  }
+};

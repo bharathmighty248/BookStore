@@ -5,13 +5,15 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateUser = exports.register = exports.login = exports.getUser = exports.getAllUsers = exports.forgotPassword = exports.deleteUser = void 0;
+exports.updateUser = exports.resetPassword = exports.register = exports.login = exports.getUser = exports.getAllUsers = exports.forgotPassword = exports.deleteUser = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
 var _user = _interopRequireDefault(require("../models/user.model"));
+
+var _resetcode = _interopRequireDefault(require("../models/resetcode.model"));
 
 var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
 
@@ -203,30 +205,54 @@ var forgotPassword = /*#__PURE__*/function () {
   return function forgotPassword(_x3) {
     return _ref4.apply(this, arguments);
   };
-}(); //update single user
+}(); //ResetPassword for Admin or User
 
 
 exports.forgotPassword = forgotPassword;
 
-var updateUser = /*#__PURE__*/function () {
-  var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(_id, body) {
-    var data;
+var resetPassword = /*#__PURE__*/function () {
+  var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(info) {
+    var codePresent, hash;
     return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
             _context5.next = 2;
-            return _user["default"].findByIdAndUpdate({
-              _id: _id
-            }, body, {
-              "new": true
+            return _resetcode["default"].findOne({
+              email: info.email,
+              resetcode: info.resetcode
             });
 
           case 2:
-            data = _context5.sent;
-            return _context5.abrupt("return", data);
+            codePresent = _context5.sent;
 
-          case 4:
+            if (!codePresent) {
+              _context5.next = 13;
+              break;
+            }
+
+            _context5.next = 6;
+            return _bcryptjs["default"].hash(info.newPassword, 10);
+
+          case 6:
+            hash = _context5.sent;
+            _context5.next = 9;
+            return _user["default"].findOneAndUpdate({
+              email: codePresent.email
+            }, {
+              password: hash
+            }, {
+              "new": true
+            });
+
+          case 9:
+            (0, _user2.sendSuccessEmail)(codePresent.email);
+            return _context5.abrupt("return", true);
+
+          case 13:
+            return _context5.abrupt("return", "code expired");
+
+          case 14:
           case "end":
             return _context5.stop();
         }
@@ -234,27 +260,33 @@ var updateUser = /*#__PURE__*/function () {
     }, _callee5);
   }));
 
-  return function updateUser(_x4, _x5) {
+  return function resetPassword(_x4) {
     return _ref5.apply(this, arguments);
   };
-}(); //delete single user
+}(); //update single user
 
 
-exports.updateUser = updateUser;
+exports.resetPassword = resetPassword;
 
-var deleteUser = /*#__PURE__*/function () {
-  var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(id) {
+var updateUser = /*#__PURE__*/function () {
+  var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(_id, body) {
+    var data;
     return _regenerator["default"].wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
             _context6.next = 2;
-            return _user["default"].findByIdAndDelete(id);
+            return _user["default"].findByIdAndUpdate({
+              _id: _id
+            }, body, {
+              "new": true
+            });
 
           case 2:
-            return _context6.abrupt("return", '');
+            data = _context6.sent;
+            return _context6.abrupt("return", data);
 
-          case 3:
+          case 4:
           case "end":
             return _context6.stop();
         }
@@ -262,29 +294,27 @@ var deleteUser = /*#__PURE__*/function () {
     }, _callee6);
   }));
 
-  return function deleteUser(_x6) {
+  return function updateUser(_x5, _x6) {
     return _ref6.apply(this, arguments);
   };
-}(); //get single user
+}(); //delete single user
 
 
-exports.deleteUser = deleteUser;
+exports.updateUser = updateUser;
 
-var getUser = /*#__PURE__*/function () {
+var deleteUser = /*#__PURE__*/function () {
   var _ref7 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(id) {
-    var data;
     return _regenerator["default"].wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
             _context7.next = 2;
-            return _user["default"].findById(id);
+            return _user["default"].findByIdAndDelete(id);
 
           case 2:
-            data = _context7.sent;
-            return _context7.abrupt("return", data);
+            return _context7.abrupt("return", '');
 
-          case 4:
+          case 3:
           case "end":
             return _context7.stop();
         }
@@ -292,8 +322,38 @@ var getUser = /*#__PURE__*/function () {
     }, _callee7);
   }));
 
-  return function getUser(_x7) {
+  return function deleteUser(_x7) {
     return _ref7.apply(this, arguments);
+  };
+}(); //get single user
+
+
+exports.deleteUser = deleteUser;
+
+var getUser = /*#__PURE__*/function () {
+  var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(id) {
+    var data;
+    return _regenerator["default"].wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            _context8.next = 2;
+            return _user["default"].findById(id);
+
+          case 2:
+            data = _context8.sent;
+            return _context8.abrupt("return", data);
+
+          case 4:
+          case "end":
+            return _context8.stop();
+        }
+      }
+    }, _callee8);
+  }));
+
+  return function getUser(_x8) {
+    return _ref8.apply(this, arguments);
   };
 }();
 

@@ -1,7 +1,8 @@
 import User from '../models/user.model';
+import resetcodemodel from '../models/resetcode.model';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { sendResetEmail } from '../utils/user.util';
+import { sendResetEmail,sendSuccessEmail } from '../utils/user.util';
 
 //get all users
 export const getAllUsers = async () => {
@@ -46,6 +47,19 @@ export const forgotPassword = async (info) => {
     return true;
   } else {
     return "Not Registered Yet";
+  }
+};
+
+//ResetPassword for Admin or User
+export const resetPassword = async (info) => {
+  const codePresent = await resetcodemodel.findOne({ email:info.email,resetcode:info.resetcode });
+  if (codePresent) {
+    const hash = await bcrypt.hash(info.newPassword, 10);
+    await User.findOneAndUpdate({email:codePresent.email},{password:hash}, {new:true});
+    sendSuccessEmail(codePresent.email);
+    return true;
+  } else {
+    return "code expired";
   }
 };
 

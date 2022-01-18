@@ -32,3 +32,17 @@ const transporter = nodemailer.createTransport({
     const code = new resetcodemodel({email:details,resetcode});
     code.save();
   };
+
+/**
+ * utility to sendSuccessEmail
+ *
+ * @param {object} details
+ */
+ export const sendSuccessEmail = (details) => {
+    transporter.sendMail({
+        from: "'Book-Store'<bookstore-account@bookstore.com>",
+        to: details,
+        subject: "Password reset successfull",
+        text: `Your Password reset is successfull. Use this new password for future actions`
+    });
+  };
