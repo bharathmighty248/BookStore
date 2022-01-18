@@ -5,13 +5,17 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.newUserValidator = void 0;
+exports.Validator = void 0;
 
 var _joi = _interopRequireDefault(require("@hapi/joi"));
 
-var newUserValidator = function newUserValidator(req, res, next) {
+var Validator = function Validator(req, res, next) {
   var schema = _joi["default"].object({
-    name: _joi["default"].string().min(4).required()
+    firstName: _joi["default"].string().min(4).required().pattern(new RegExp('^[A-Za-z]{1}[a-z]{1,}$')),
+    lastName: _joi["default"].string().min(4).required().pattern(new RegExp('^[A-Za-z]{1}[a-z]{1,}$')),
+    email: _joi["default"].string().required().pattern(new RegExp('[a-zA-Z]+[+_.-]{0,1}[0-9a-zA-Z]+[@][a-zA-Z0-9]+[.][a-zA-Z]{2,3}([.][a-zA-Z]{2,3}){0,1}')),
+    password: _joi["default"].string().required().pattern(new RegExp('[A-Za-z]{3,}[$&=?@#|*%!]{1,}[0-9]{1,}')),
+    role: _joi["default"].string()
   });
 
   var _schema$validate = schema.validate(req.body),
@@ -26,4 +30,4 @@ var newUserValidator = function newUserValidator(req, res, next) {
   }
 };
 
-exports.newUserValidator = newUserValidator;
+exports.Validator = Validator;

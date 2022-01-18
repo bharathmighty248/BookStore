@@ -16,7 +16,7 @@
     "max-len": [
       "error",
       {
-        "code": 80
+        "code": 120
       }
     ],
     "no-irregular-whitespace": "error",
@@ -27,5 +27,11 @@
   "env": {
     "browser": true,
     "node": true
-  }
+  },
+  "prettier/prettier": [
+    "error",
+    {
+      "endOfLine": "auto"
+    }
+  ]
 }

@@ -27,3 +27,10 @@ export const userAuth = async (req, res, next) => {
     next(error);
   }
 };
+
+export const setRole = (role) => {
+  return (req, res, next) => {
+    req.body.role = role;
+    next();
+  }
+};

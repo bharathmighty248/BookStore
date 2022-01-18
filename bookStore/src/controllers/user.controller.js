@@ -40,19 +40,38 @@ export const getUser = async (req, res, next) => {
 };
 
 /**
- * Controller to create a new user
+ * Controller to Register Admin and User
  * @param  {object} req - request object
  * @param {object} res - response object
  * @param {Function} next
  */
-export const newUser = async (req, res, next) => {
+export const register = async (req, res, next) => {
   try {
-    const data = await UserService.newUser(req.body);
-    res.status(HttpStatus.CREATED).json({
-      code: HttpStatus.CREATED,
-      data: data,
-      message: 'User created successfully'
-    });
+    const info = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: req.body.password,
+      role: req.body.role
+    }
+    const data = await UserService.register(info);
+    if (data) {
+      res.status(HttpStatus.CREATED).json({
+        code: HttpStatus.CREATED,
+        message: 'Registration successfull',
+        data: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          role: data.role
+        }
+      });
+    } else {
+      res.status(HttpStatus.CONFLICT).json({
+        code: HttpStatus.CONFLICT,
+        message: 'Email Already Exist'
+      });
+    }
   } catch (error) {
     next(error);
   }

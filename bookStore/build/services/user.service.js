@@ -5,13 +5,15 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateUser = exports.newUser = exports.getUser = exports.getAllUsers = exports.deleteUser = void 0;
+exports.updateUser = exports.register = exports.getUser = exports.getAllUsers = exports.deleteUser = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
 var _user = _interopRequireDefault(require("../models/user.model"));
+
+var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
 
 //get all users
 var getAllUsers = /*#__PURE__*/function () {
@@ -39,26 +41,48 @@ var getAllUsers = /*#__PURE__*/function () {
   return function getAllUsers() {
     return _ref.apply(this, arguments);
   };
-}(); //create new user
+}(); //Register new Admin or User
 
 
 exports.getAllUsers = getAllUsers;
 
-var newUser = /*#__PURE__*/function () {
-  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(body) {
-    var data;
+var register = /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(info) {
+    var userPresent, hash, data;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return _user["default"].create(body);
+            return _user["default"].find({
+              email: info.email
+            });
 
           case 2:
+            userPresent = _context2.sent;
+
+            if (!(userPresent.length === 0)) {
+              _context2.next = 14;
+              break;
+            }
+
+            _context2.next = 6;
+            return _bcryptjs["default"].hash(info.password, 10);
+
+          case 6:
+            hash = _context2.sent;
+            info.password = hash;
+            _context2.next = 10;
+            return _user["default"].create(info);
+
+          case 10:
             data = _context2.sent;
             return _context2.abrupt("return", data);
 
-          case 4:
+          case 14:
+            return _context2.abrupt("return", null);
+
+          case 15:
           case "end":
             return _context2.stop();
         }
@@ -66,13 +90,13 @@ var newUser = /*#__PURE__*/function () {
     }, _callee2);
   }));
 
-  return function newUser(_x) {
+  return function register(_x) {
     return _ref2.apply(this, arguments);
   };
 }(); //update single user
 
 
-exports.newUser = newUser;
+exports.register = register;
 
 var updateUser = /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_id, body) {

@@ -7,7 +7,7 @@ var _typeof = require("@babel/runtime/helpers/typeof");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateUser = exports.newUser = exports.getUser = exports.getAllUsers = exports.deleteUser = void 0;
+exports.updateUser = exports.register = exports.getUser = exports.getAllUsers = exports.deleteUser = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -114,7 +114,7 @@ var getUser = /*#__PURE__*/function () {
   };
 }();
 /**
- * Controller to create a new user
+ * Controller to Register Admin and User
  * @param  {object} req - request object
  * @param {object} res - response object
  * @param {Function} next
@@ -123,41 +123,62 @@ var getUser = /*#__PURE__*/function () {
 
 exports.getUser = getUser;
 
-var newUser = /*#__PURE__*/function () {
+var register = /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(req, res, next) {
-    var data;
+    var info, data;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
             _context3.prev = 0;
-            _context3.next = 3;
-            return UserService.newUser(req.body);
+            info = {
+              firstName: req.body.firstName,
+              lastName: req.body.lastName,
+              email: req.body.email,
+              password: req.body.password,
+              role: req.body.role
+            };
+            _context3.next = 4;
+            return UserService.register(info);
 
-          case 3:
+          case 4:
             data = _context3.sent;
-            res.status(_httpStatusCodes["default"].CREATED).json({
-              code: _httpStatusCodes["default"].CREATED,
-              data: data,
-              message: 'User created successfully'
-            });
-            _context3.next = 10;
+
+            if (data) {
+              res.status(_httpStatusCodes["default"].CREATED).json({
+                code: _httpStatusCodes["default"].CREATED,
+                message: 'Registration successfull',
+                data: {
+                  firstName: data.firstName,
+                  lastName: data.lastName,
+                  email: data.email,
+                  role: data.role
+                }
+              });
+            } else {
+              res.status(_httpStatusCodes["default"].CONFLICT).json({
+                code: _httpStatusCodes["default"].CONFLICT,
+                message: 'Email Already Exist'
+              });
+            }
+
+            _context3.next = 11;
             break;
 
-          case 7:
-            _context3.prev = 7;
+          case 8:
+            _context3.prev = 8;
             _context3.t0 = _context3["catch"](0);
             next(_context3.t0);
 
-          case 10:
+          case 11:
           case "end":
             return _context3.stop();
         }
       }
-    }, _callee3, null, [[0, 7]]);
+    }, _callee3, null, [[0, 8]]);
   }));
 
-  return function newUser(_x7, _x8, _x9) {
+  return function register(_x7, _x8, _x9) {
     return _ref3.apply(this, arguments);
   };
 }();
@@ -169,7 +190,7 @@ var newUser = /*#__PURE__*/function () {
  */
 
 
-exports.newUser = newUser;
+exports.register = register;
 
 var updateUser = /*#__PURE__*/function () {
   var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res, next) {

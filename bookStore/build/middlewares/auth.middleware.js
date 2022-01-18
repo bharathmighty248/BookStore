@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.userAuth = void 0;
+exports.userAuth = exports.setRole = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -77,3 +77,12 @@ var userAuth = /*#__PURE__*/function () {
 }();
 
 exports.userAuth = userAuth;
+
+var setRole = function setRole(role) {
+  return function (req, res, next) {
+    req.body.role = role;
+    next();
+  };
+};
+
+exports.setRole = setRole;

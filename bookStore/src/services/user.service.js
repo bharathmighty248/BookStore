@@ -1,4 +1,5 @@
 import User from '../models/user.model';
+import bcrypt from 'bcryptjs';
 
 //get all users
 export const getAllUsers = async () => {
@@ -6,10 +7,17 @@ export const getAllUsers = async () => {
   return data;
 };
 
-//create new user
-export const newUser = async (body) => {
-  const data = await User.create(body);
-  return data;
+//Register new Admin or User
+export const register = async (info) => {
+  const userPresent = await User.find({ email:info.email });
+  if (userPresent.length === 0) {
+    const hash = await bcrypt.hash(info.password, 10);
+    info.password = hash;
+    const data = await User.create(info);
+    return data;
+  } else {
+    return null;
+  }
 };
 
 //update single user
