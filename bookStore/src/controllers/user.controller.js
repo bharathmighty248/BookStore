@@ -113,6 +113,34 @@ export const register = async (req, res, next) => {
 };
 
 /**
+ * Controller to ForgotPassword
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+ export const forgotPassword = async (req, res, next) => {
+  try {
+    const info = {
+      email: req.body.email
+    }
+    const data = await UserService.forgotPassword(info);
+    if (data == "Not Registered Yet") {
+      res.status(HttpStatus.NOT_FOUND).json({
+        code: HttpStatus.NOT_FOUND,
+        message: 'Not Registered Yet'
+      });
+    } else {
+      res.status(HttpStatus.OK).json({
+        code: HttpStatus.OK,
+        message: 'Reset-code Sent to your Email'
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Controller to update a user
  * @param  {object} req - request object
  * @param {object} res - response object

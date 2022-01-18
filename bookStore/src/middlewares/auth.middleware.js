@@ -28,6 +28,11 @@ export const userAuth = async (req, res, next) => {
   }
 };
 
+/**
+ * Middleware to Set Role either Admin or User
+ *
+ * @param {String} role
+ */
 export const setRole = (role) => {
   return (req, res, next) => {
     req.body.role = role;

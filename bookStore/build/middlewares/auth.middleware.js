@@ -75,6 +75,12 @@ var userAuth = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
+/**
+ * Middleware to Set Role either Admin or User
+ *
+ * @param {String} role
+ */
+
 
 exports.userAuth = userAuth;
 

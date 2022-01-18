@@ -17,6 +17,9 @@ router.post('/user', Validator, setRole('User'), userController.register);
 //route to login user or Admin
 router.post('/login', userController.login);
 
+//route to forgotPassword
+router.post('/forgotpassword',userController.forgotPassword);
+
 //route to get a single user by their user id
 router.get('/:_id', userAuth, userController.getUser);
 

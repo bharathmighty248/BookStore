@@ -1,6 +1,7 @@
 import User from '../models/user.model';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { sendResetEmail } from '../utils/user.util';
 
 //get all users
 export const getAllUsers = async () => {
@@ -32,6 +33,17 @@ export const login = async (info) => {
     } else {
       return "Incorrect Password"
     }
+  } else {
+    return "Not Registered Yet";
+  }
+};
+
+//ForgotPassword for Admin or User
+export const forgotPassword = async (info) => {
+  const userPresent = await User.findOne({ email:info.email });
+  if (userPresent) {
+    sendResetEmail(userPresent.email);
+    return true;
   } else {
     return "Not Registered Yet";
   }
