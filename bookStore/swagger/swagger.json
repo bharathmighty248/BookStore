@@ -293,6 +293,50 @@
                     }
                 }
             }
+        },
+        "/books/deletebook/{bookId}": {
+            "delete": {
+                "tags": ["Delete Book"],
+                "description": "Delete Books in the store",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Token for Authentication..! Please Enter a token along with bearer [bearer ]..",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "bookId",
+                        "description": "Enter Book Id",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Book deleted successfully"
+                    },
+                    "400": {
+                        "description": "Authorization token is required"
+                    },
+                    "401": {
+                        "description": "Authorization Failed (or) Only Admin Had this Permissions"
+                    },
+                    "404": {
+                        "description": "Book Not Found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
