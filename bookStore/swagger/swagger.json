@@ -51,6 +51,37 @@
                     }
                 }
             }
+        },
+        "/users/user": {
+            "post": {
+                "tags": ["User Registration"],
+                "description": "Register as User to buy Books",
+                "parameters": [
+                    {
+                        "name": "User Registration",
+                        "in": "body",
+                        "description": "User details",
+                        "schema": {
+                            "$ref": "#/definitions/registrationinfo"
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "schema": {
+                    "$ref": "#/definitions/registrationinfo"
+                },
+                "responses": {
+                    "201": {
+                        "description": "Registration successfull"
+                    },
+                    "409": {
+                        "description": "Email Already Exist"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
