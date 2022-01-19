@@ -82,6 +82,40 @@
                     }
                 }
             }
+        },
+        "/users/login": {
+            "post": {
+                "tags": ["Login"],
+                "description": "Login to book store",
+                "parameters": [
+                    {
+                        "name": "Login",
+                        "in": "body",
+                        "description": "Login details",
+                        "schema": {
+                            "$ref": "#/definitions/logininfo"
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "schema": {
+                    "$ref": "#/definitions/logininfo"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login Successful"
+                    },
+                    "404": {
+                        "description": "Not Registered Yet"
+                    },
+                    "401": {
+                        "description": "Incorrect Password"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -96,6 +130,19 @@
                     "type": "string",
                     "description": "Last Name"
                 },
+                "email": {
+                    "type": "string",
+                    "description": "Email ID"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password"
+                }
+            }
+        },
+        "logininfo": {
+            "type": "object",
+            "properties": {
                 "email": {
                     "type": "string",
                     "description": "Email ID"
