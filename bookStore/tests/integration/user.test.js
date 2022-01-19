@@ -2,6 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 import app from '../../src/index';
+import Reset from '../../src/models/resetcode.model';
 
 chai.should();
 
@@ -145,6 +146,48 @@ describe('Admin APIs Test', () => {
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.have.property("message").eql("Reset-code Sent to your Email");
+        done();
+      });
+    });
+  });
+
+  describe('Reset Password Api', () => {
+    before((done) => {
+      const reset = new Reset({email: "bharathmighty248@gmail.com",resetcode: "0uoyqxbdya"});
+      reset.save()
+      .then(() => done());
+    });
+
+    it('GivenDetails_WhenInCorrect_shouldReturnCodeExpired', (done) => {
+      const reset = {
+        email: "bharathmighty248@gmail.com",
+        newPassword: "mighty@248",
+        resetcode: "abcd12abcd"
+      };
+      chai
+      .request(app)
+      .post('/api/v1/users/resetpassword')
+      .send(reset)
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property("message").eql("Reset-code is expired, Request new Reset-code");
+        done();
+      });
+    });
+
+    it('GivenDetails_WhenCorrect_shouldresetPassword', (done) => {
+      const reset = {
+        email: "bharathmighty248@gmail.com",
+        newPassword: "mighty@248",
+        resetcode: "0uoyqxbdya"
+      };
+      chai
+      .request(app)
+      .post('/api/v1/users/resetpassword')
+      .send(reset)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property("message").eql("Password reset successfull");
         done();
       });
     });
