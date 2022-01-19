@@ -192,4 +192,50 @@ describe('Admin APIs Test', () => {
       });
     });
   });
+
+  describe('User registration Api', () => {
+    before((done) => {
+      for (const collection in mongoose.connection.collections) {
+        mongoose.connection.collections[collection].deleteOne(() => {});
+      };
+      done();
+    })
+
+    it('GivenRegistrationDetails_WhenProper_shouldReturnSuccessWithRoleUser', (done) => {
+      const register = {
+        firstName: "rajendra",
+        lastName: "pasumarthi",
+        email: "rajpowerjems20@gmail.com",
+        password: "rajpower@20"
+      };
+      chai
+      .request(app)
+      .post('/api/v1/users/user')
+      .send(register)
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.should.have.property("message").eql("Registration successfull");
+        res.body.data.should.have.property("role").eql("User");
+        done();
+      });
+    });
+
+    it('GivenRegistrationDetails_WhenEmailAlreadyRegistered_shouldReturnConflict', (done) => {
+      const register = {
+        firstName: "rajendra",
+        lastName: "pasumarthi",
+        email: "rajpowerjems20@gmail.com",
+        password: "rajpower@20"
+      };
+      chai
+      .request(app)
+      .post('/api/v1/users/user')
+      .send(register)
+      .end((err, res) => {
+        res.should.have.status(409);
+        res.body.should.have.property("message").eql("Email Already Exist");
+        done();
+      });
+    });
+  });
 });
