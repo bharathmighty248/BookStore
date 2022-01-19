@@ -9,3 +9,13 @@ export const addbook = async (info) => {
         throw error;
     }
 };
+
+//Get all books 
+export const getallbooks = async () => {
+    try {
+        const data = await Book.find();
+        return data;
+    } catch (error) {
+        throw error;
+    }
+};

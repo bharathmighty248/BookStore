@@ -22,6 +22,8 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 var router = _express["default"].Router(); // route to add book
 
 
-router.post('/addbook', _auth.auth, _auth.verifyRole, bookController.addbook);
+router.post('/addbook', _auth.auth, _auth.verifyRole, bookController.addbook); // route to Get all books
+
+router.get('/getallbooks', bookController.getallbooks);
 var _default = router;
 exports["default"] = _default;

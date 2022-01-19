@@ -7,4 +7,7 @@ const router = express.Router();
 // route to add book
 router.post('/addbook', auth, verifyRole, bookController.addbook);
 
+// route to Get all books
+router.get('/getallbooks',bookController.getallbooks);
+
 export default router;

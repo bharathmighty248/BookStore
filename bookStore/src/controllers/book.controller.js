@@ -2,7 +2,7 @@ import HttpStatus from 'http-status-codes';
 import * as BookService from '../services/book.service';
 
 /**
- * Controller to Register Admin and User
+ * Controller to Add book by Admin
  * @param  {object} req - request object
  * @param {object} res - response object
  * @param {Function} next
@@ -28,6 +28,27 @@ export const addbook = async (req, res, next) => {
               quantity: data.quantity,
               price: data.price
             }
+        });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Controller to Get all books
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+export const getallbooks = async (req, res, next) => {
+  try {
+    const data = await BookService.getallbooks();
+    if (data) {
+        res.status(HttpStatus.OK).json({
+            code: HttpStatus.OK,
+            message: 'Available books',
+            data
         });
     }
   } catch (error) {
