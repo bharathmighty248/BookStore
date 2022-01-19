@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getallbooks = exports.addbook = void 0;
+exports.updatebook = exports.getallbooks = exports.addbook = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -81,6 +81,120 @@ var getallbooks = /*#__PURE__*/function () {
   return function getallbooks() {
     return _ref2.apply(this, arguments);
   };
-}();
+}(); //Update book 
+
 
 exports.getallbooks = getallbooks;
+
+var updatebook = /*#__PURE__*/function () {
+  var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(info) {
+    var book;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            _context3.next = 3;
+            return _book["default"].findById(info.bookId);
+
+          case 3:
+            book = _context3.sent;
+
+            if (!(book != null)) {
+              _context3.next = 23;
+              break;
+            }
+
+            if (!(info.title !== undefined)) {
+              _context3.next = 8;
+              break;
+            }
+
+            _context3.next = 8;
+            return _book["default"].findOneAndUpdate({
+              _id: info.bookId
+            }, {
+              title: info.title
+            });
+
+          case 8:
+            if (!(info.description !== undefined)) {
+              _context3.next = 11;
+              break;
+            }
+
+            _context3.next = 11;
+            return _book["default"].findOneAndUpdate({
+              _id: info.bookId
+            }, {
+              description: info.description
+            });
+
+          case 11:
+            if (!(info.author !== undefined)) {
+              _context3.next = 14;
+              break;
+            }
+
+            _context3.next = 14;
+            return _book["default"].findOneAndUpdate({
+              _id: info.bookId
+            }, {
+              author: info.author
+            });
+
+          case 14:
+            if (!(info.quantity !== undefined)) {
+              _context3.next = 17;
+              break;
+            }
+
+            _context3.next = 17;
+            return _book["default"].findOneAndUpdate({
+              _id: info.bookId
+            }, {
+              quantity: info.quantity
+            });
+
+          case 17:
+            if (!(info.price !== undefined)) {
+              _context3.next = 20;
+              break;
+            }
+
+            _context3.next = 20;
+            return _book["default"].findOneAndUpdate({
+              _id: info.bookId
+            }, {
+              price: info.price
+            });
+
+          case 20:
+            return _context3.abrupt("return", true);
+
+          case 23:
+            return _context3.abrupt("return", "Book Not Found");
+
+          case 24:
+            _context3.next = 29;
+            break;
+
+          case 26:
+            _context3.prev = 26;
+            _context3.t0 = _context3["catch"](0);
+            throw _context3.t0;
+
+          case 29:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, null, [[0, 26]]);
+  }));
+
+  return function updatebook(_x2) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
+exports.updatebook = updatebook;

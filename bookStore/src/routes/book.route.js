@@ -10,4 +10,7 @@ router.post('/addbook', auth, verifyRole, bookController.addbook);
 // route to Get all books
 router.get('/getallbooks',bookController.getallbooks);
 
+// route to update book
+router.put('/updatebook/:bookId',auth, verifyRole, bookController.updatebook);
+
 export default router;

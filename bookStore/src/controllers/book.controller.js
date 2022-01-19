@@ -55,3 +55,36 @@ export const getallbooks = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * Controller to Update Book
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+export const updatebook = async (req, res, next) => {
+  try {
+    const info = {
+        bookId: req.params.bookId,
+        author: req.body.author,
+        title: req.body.title,
+        description: req.body.description,
+        quantity: req.body.quantity,
+        price: req.body.price
+    }
+    const data = await BookService.updatebook(info);
+    if (data == "Book Not Found") {
+        res.status(HttpStatus.NOT_FOUND).json({
+            code: HttpStatus.NOT_FOUND,
+            message: 'Book Not Found'
+          });
+    } else {
+        res.status(HttpStatus.OK).json({
+            code: HttpStatus.OK,
+            message: 'Book updated successfully'
+        });
+    }
+  } catch (error) {
+    next(error);
+  }
+};

@@ -19,3 +19,32 @@ export const getallbooks = async () => {
         throw error;
     }
 };
+
+//Update book 
+export const updatebook = async (info) => {
+    try {
+        const book = await Book.findById(info.bookId);
+        if (book != null) {
+            if (info.title !== undefined) {
+                await Book.findOneAndUpdate({_id:info.bookId},{title:info.title});
+            }
+            if (info.description !== undefined) {
+                await Book.findOneAndUpdate({_id:info.bookId},{description:info.description});
+            }
+            if (info.author !== undefined) {
+                await Book.findOneAndUpdate({_id:info.bookId},{author:info.author});
+            }
+            if (info.quantity !== undefined) {
+                await Book.findOneAndUpdate({_id:info.bookId},{quantity:info.quantity});
+            }
+            if (info.price !== undefined) {
+                await Book.findOneAndUpdate({_id:info.bookId},{price:info.price});
+            }
+            return true;
+        } else {
+            return "Book Not Found";
+        }
+    } catch (error) {
+        throw error;
+    }
+};

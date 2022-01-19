@@ -7,7 +7,7 @@ var _typeof = require("@babel/runtime/helpers/typeof");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getallbooks = exports.addbook = void 0;
+exports.updatebook = exports.getallbooks = exports.addbook = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -134,5 +134,69 @@ var getallbooks = /*#__PURE__*/function () {
     return _ref2.apply(this, arguments);
   };
 }();
+/**
+ * Controller to Update Book
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+
 
 exports.getallbooks = getallbooks;
+
+var updatebook = /*#__PURE__*/function () {
+  var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(req, res, next) {
+    var info, data;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            info = {
+              bookId: req.params.bookId,
+              author: req.body.author,
+              title: req.body.title,
+              description: req.body.description,
+              quantity: req.body.quantity,
+              price: req.body.price
+            };
+            _context3.next = 4;
+            return BookService.updatebook(info);
+
+          case 4:
+            data = _context3.sent;
+
+            if (data == "Book Not Found") {
+              res.status(_httpStatusCodes["default"].NOT_FOUND).json({
+                code: _httpStatusCodes["default"].NOT_FOUND,
+                message: 'Book Not Found'
+              });
+            } else {
+              res.status(_httpStatusCodes["default"].OK).json({
+                code: _httpStatusCodes["default"].OK,
+                message: 'Book updated successfully'
+              });
+            }
+
+            _context3.next = 11;
+            break;
+
+          case 8:
+            _context3.prev = 8;
+            _context3.t0 = _context3["catch"](0);
+            next(_context3.t0);
+
+          case 11:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, null, [[0, 8]]);
+  }));
+
+  return function updatebook(_x7, _x8, _x9) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
+exports.updatebook = updatebook;
