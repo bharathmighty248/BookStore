@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.userAuth = exports.setRole = void 0;
+exports.verifyRole = exports.setRole = exports.auth = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -23,10 +23,9 @@ var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
  * @param {Object} res
  * @param {Function} next
  */
-var userAuth = /*#__PURE__*/function () {
+var auth = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res, next) {
-    var bearerToken, _yield$jwt$verify, user;
-
+    var bearerToken;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -46,32 +45,36 @@ var userAuth = /*#__PURE__*/function () {
 
           case 4:
             bearerToken = bearerToken.split(' ')[1];
-            _context.next = 7;
-            return _jsonwebtoken["default"].verify(bearerToken, 'your-secret-key');
 
-          case 7:
-            _yield$jwt$verify = _context.sent;
-            user = _yield$jwt$verify.user;
-            res.locals.user = user;
-            res.locals.token = bearerToken;
-            next();
-            _context.next = 17;
+            _jsonwebtoken["default"].verify(bearerToken, process.env.SECRET_KEY, function (error, decodedtoken) {
+              if (error) {
+                throw {
+                  code: _httpStatusCodes["default"].UNAUTHORIZED,
+                  message: 'Authorization Failed'
+                };
+              } else {
+                req.user = decodedtoken;
+                next();
+              }
+            });
+
+            _context.next = 11;
             break;
 
-          case 14:
-            _context.prev = 14;
+          case 8:
+            _context.prev = 8;
             _context.t0 = _context["catch"](0);
             next(_context.t0);
 
-          case 17:
+          case 11:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 14]]);
+    }, _callee, null, [[0, 8]]);
   }));
 
-  return function userAuth(_x, _x2, _x3) {
+  return function auth(_x, _x2, _x3) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -82,7 +85,7 @@ var userAuth = /*#__PURE__*/function () {
  */
 
 
-exports.userAuth = userAuth;
+exports.auth = auth;
 
 var setRole = function setRole(role) {
   return function (req, res, next) {
@@ -90,5 +93,26 @@ var setRole = function setRole(role) {
     next();
   };
 };
+/**
+ * Middleware to verify Role
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
+
 
 exports.setRole = setRole;
+
+var verifyRole = function verifyRole(req, res, next) {
+  if (req.user.role == 'Admin') {
+    next();
+  } else {
+    throw {
+      code: _httpStatusCodes["default"].UNAUTHORIZED,
+      message: 'Only Admin Had this Permissions'
+    };
+  }
+};
+
+exports.verifyRole = verifyRole;

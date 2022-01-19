@@ -11,9 +11,7 @@ exports["default"] = void 0;
 
 var _express = _interopRequireDefault(require("express"));
 
-var userController = _interopRequireWildcard(require("../controllers/user.controller"));
-
-var _user2 = require("../validators/user.validator");
+var bookController = _interopRequireWildcard(require("../controllers/book.controller"));
 
 var _auth = require("../middlewares/auth.middleware");
 
@@ -21,17 +19,9 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-var router = _express["default"].Router(); //route to create a new Admin
+var router = _express["default"].Router(); // route to add book
 
 
-router.post('/admin', _user2.Validator, (0, _auth.setRole)('Admin'), userController.register); //route to create a new User
-
-router.post('/user', _user2.Validator, (0, _auth.setRole)('User'), userController.register); //route to login user or Admin
-
-router.post('/login', userController.login); //route to forgotPassword
-
-router.post('/forgotpassword', userController.forgotPassword); //route to resetPassword
-
-router.post('/resetpassword', _user2.resetPasswordValidator, userController.resetPassword);
+router.post('/addbook', _auth.auth, _auth.verifyRole, bookController.addbook);
 var _default = router;
 exports["default"] = _default;

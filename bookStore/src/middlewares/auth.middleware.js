@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
  * @param {Object} res
  * @param {Function} next
  */
-export const userAuth = async (req, res, next) => {
+export const auth = async (req, res, next) => {
   try {
     let bearerToken = req.header('Authorization');
     if (!bearerToken)
@@ -19,10 +19,17 @@ export const userAuth = async (req, res, next) => {
       };
     bearerToken = bearerToken.split(' ')[1];
 
-    const { user } = await jwt.verify(bearerToken, 'your-secret-key');
-    res.locals.user = user;
-    res.locals.token = bearerToken;
-    next();
+    jwt.verify(bearerToken, process.env.SECRET_KEY,(error, decodedtoken) => {
+      if (error) {
+        throw {
+          code: HttpStatus.UNAUTHORIZED,
+          message: 'Authorization Failed'
+        };
+      } else {
+        req.user = decodedtoken;
+        next();
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -37,5 +44,23 @@ export const setRole = (role) => {
   return (req, res, next) => {
     req.body.role = role;
     next();
+  }
+};
+
+/**
+ * Middleware to verify Role
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
+ export const verifyRole = (req, res, next) => {
+  if (req.user.role == 'Admin'){
+    next();
+  } else {
+    throw {
+      code: HttpStatus.UNAUTHORIZED,
+      message: 'Only Admin Had this Permissions'
+    };
   }
 };
