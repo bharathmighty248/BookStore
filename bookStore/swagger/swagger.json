@@ -116,6 +116,37 @@
                     }
                 }
             }
+        },
+        "/users/forgotpassword": {
+            "post": {
+                "tags": ["ForgotPassword"],
+                "description": "Forgot your password? Don't worry, you can reset it..!",
+                "parameters": [
+                    {
+                        "name": "Forgot password",
+                        "in": "body",
+                        "description": "Email details",
+                        "schema": {
+                            "$ref": "#/definitions/emailinfo"
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "schema": {
+                    "$ref": "#/definitions/emailinfo"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Reset-code Sent to your Email"
+                    },
+                    "404": {
+                        "description": "Not Registered Yet"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -150,6 +181,15 @@
                 "password": {
                     "type": "string",
                     "description": "Password"
+                }
+            }
+        },
+        "emailinfo": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "description": "Email ID"
                 }
             }
         }
