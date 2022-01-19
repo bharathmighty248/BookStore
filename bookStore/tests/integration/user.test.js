@@ -117,4 +117,36 @@ describe('Admin APIs Test', () => {
       });
     });
   });
+
+  describe('Forgot Password Api', () => {
+    it('GivenEmailDetails_WhennotRegistered_shouldnotSendResetemail', (done) => {
+      const forgot = {
+        email: "bharathmighty@gmail.com"
+      };
+      chai
+      .request(app)
+      .post('/api/v1/users/forgotpassword')
+      .send(forgot)
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property("message").eql("Not Registered Yet");
+        done();
+      });
+    });
+
+    it('GivenEmailDetails_WhenRegistered_shouldSendResetemail', (done) => {
+      const forgot = {
+        email: "bharathmighty248@gmail.com"
+      };
+      chai
+      .request(app)
+      .post('/api/v1/users/forgotpassword')
+      .send(forgot)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property("message").eql("Reset-code Sent to your Email");
+        done();
+      });
+    });
+  });
 });
