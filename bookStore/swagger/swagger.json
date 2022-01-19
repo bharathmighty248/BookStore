@@ -147,6 +147,37 @@
                     }
                 }
             }
+        },
+        "/users/resetpassword": {
+            "post": {
+                "tags": ["ResetPassword"],
+                "description": "Reset your password with reset-code, which sended to your registered email",
+                "parameters": [
+                    {
+                        "name": "Reset password",
+                        "in": "body",
+                        "description": "reset details",
+                        "schema": {
+                            "$ref": "#/definitions/resetinfo"
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "schema": {
+                    "$ref": "#/definitions/resetinfo"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password reset successfull"
+                    },
+                    "404": {
+                        "description": "Reset-code is expired, Request new Reset-code"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -190,6 +221,23 @@
                 "email": {
                     "type": "string",
                     "description": "Email ID"
+                }
+            }
+        },
+        "resetinfo": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "description": "Email ID"
+                },
+                "newPassword": {
+                    "type": "string",
+                    "description": "new Password"
+                },
+                "resetcode": {
+                    "type": "string",
+                    "description": "got through your registered email"
                 }
             }
         }
