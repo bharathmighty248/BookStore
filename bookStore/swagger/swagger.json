@@ -178,6 +178,49 @@
                     }
                 }
             }
+        },
+        "/books/addbook": {
+            "post": {
+                "tags": ["Add Book"],
+                "description": "Add New Book To the Store",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Token for Authentication..! Please Enter a token along with bearer [bearer ]..",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    },
+                    {
+                        "name": "Add book",
+                        "in": "body",
+                        "description": "book details",
+                        "schema": {
+                            "$ref": "#/definitions/bookinfo"
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "schema": {
+                    "$ref": "#/definitions/bookinfo"
+                },
+                "responses": {
+                    "201": {
+                        "description": "Book added successfully"
+                    },
+                    "400": {
+                        "description": "Authorization token is required"
+                    },
+                    "401": {
+                        "description": "Authorization Failed (or) Only Admin Had this Permissions"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -238,6 +281,31 @@
                 "resetcode": {
                     "type": "string",
                     "description": "got through your registered email"
+                }
+            }
+        },
+        "bookinfo": {
+            "type":"object",
+            "properties": {
+                "author": {
+                    "type": "string",
+                    "description": "author name"
+                },
+                "title": {
+                    "type": "string",
+                    "description": "book title"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "book description"
+                },
+                "quantity": {
+                    "type": "number",
+                    "description": "number of books"
+                },
+                "price": {
+                    "type": "number",
+                    "description": "price of book"
                 }
             }
         }
