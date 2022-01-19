@@ -221,6 +221,23 @@
                     }
                 }
             }
+        },
+        "/books/getallbooks": {
+            "get": {
+                "tags": ["Get All Books"],
+                "description": "Get all available books",
+                "parameters": [],
+                "produces": ["application/json"],
+                
+                "responses": {
+                    "200": {
+                        "description": "Available books"
+                    },
+                    "404": {
+                        "description": "No book found"
+                    }
+                }
+            }
         }
     },
     "definitions": {
