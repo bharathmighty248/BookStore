@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updatebook = exports.getallbooks = exports.addbook = void 0;
+exports.updatebook = exports.getallbooks = exports.deletebook = exports.addbook = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -195,6 +195,40 @@ var updatebook = /*#__PURE__*/function () {
   return function updatebook(_x2) {
     return _ref3.apply(this, arguments);
   };
-}();
+}(); //Delete book 
+
 
 exports.updatebook = updatebook;
+
+var deletebook = /*#__PURE__*/function () {
+  var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(info) {
+    return _regenerator["default"].wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            _context4.next = 3;
+            return _book["default"].findByIdAndRemove(info);
+
+          case 3:
+            return _context4.abrupt("return", _context4.sent);
+
+          case 6:
+            _context4.prev = 6;
+            _context4.t0 = _context4["catch"](0);
+            return _context4.abrupt("return", _context4.t0);
+
+          case 9:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, null, [[0, 6]]);
+  }));
+
+  return function deletebook(_x3) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+
+exports.deletebook = deletebook;

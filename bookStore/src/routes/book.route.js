@@ -13,4 +13,7 @@ router.get('/getallbooks',bookController.getallbooks);
 // route to update book
 router.put('/updatebook/:bookId',auth, verifyRole, bookController.updatebook);
 
+// route to delete book
+router.delete('/deletebook/:bookId',auth, verifyRole, bookController.deletebook);
+
 export default router;

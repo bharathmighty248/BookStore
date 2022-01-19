@@ -48,3 +48,12 @@ export const updatebook = async (info) => {
         throw error;
     }
 };
+
+//Delete book 
+export const deletebook = async (info) => {
+    try {
+        return await Book.findByIdAndRemove(info);
+    } catch (error) {
+        return error;
+    }
+};

@@ -88,3 +88,28 @@ export const updatebook = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * Controller to Delete book
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+export const deletebook = async (req, res, next) => {
+  try {
+    const data = await BookService.deletebook(req.params.bookId);
+    if (data != null){
+        res.status(HttpStatus.OK).json({
+            code: HttpStatus.OK,
+            message: 'Book deleted successfully'
+        });
+    } else {
+        res.status(HttpStatus.NOT_FOUND).json({
+            code: HttpStatus.NOT_FOUND,
+            message: 'Book Not Found'
+          });
+    }
+  } catch (error) {
+    next(error);
+  }
+};

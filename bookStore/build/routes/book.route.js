@@ -26,6 +26,8 @@ router.post('/addbook', _auth.auth, _auth.verifyRole, bookController.addbook); /
 
 router.get('/getallbooks', bookController.getallbooks); // route to update book
 
-router.put('/updatebook/:bookId', _auth.auth, _auth.verifyRole, bookController.updatebook);
+router.put('/updatebook/:bookId', _auth.auth, _auth.verifyRole, bookController.updatebook); // route to delete book
+
+router["delete"]('/deletebook/:bookId', _auth.auth, _auth.verifyRole, bookController.deletebook);
 var _default = router;
 exports["default"] = _default;
