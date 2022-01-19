@@ -2,6 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 import app from '../../src/index';
+import Book from '../../src/models/book.model';
 
 chai.should();
 
@@ -108,6 +109,19 @@ describe('Book APIs Test', () => {
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.have.property("message").eql("Book added successfully");
+          done();
+        });
+    });
+  });
+
+  describe('GetAll Books Api', () => {
+    it('WhenRequestedGetAllBooks_shouldReturnAvailableBooks', (done) => {
+        chai
+        .request(app)
+        .get('/api/v1/books/getallbooks')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("message").eql("Available books");
           done();
         });
     });
