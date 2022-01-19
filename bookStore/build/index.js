@@ -17,6 +17,10 @@ var _cors = _interopRequireDefault(require("cors"));
 
 var _helmet = _interopRequireDefault(require("helmet"));
 
+var _swaggerUiExpress = _interopRequireDefault(require("swagger-ui-express"));
+
+var _swagger = _interopRequireDefault(require("../swagger/swagger.json"));
+
 var _routes = _interopRequireDefault(require("./routes"));
 
 var _database = _interopRequireDefault(require("./config/database"));
@@ -39,6 +43,7 @@ var port = process.env.APP_PORT;
 var api_version = process.env.API_VERSION;
 app.use((0, _cors["default"])());
 app.use((0, _helmet["default"])());
+app.use("/api/".concat(api_version, "/docs"), _swaggerUiExpress["default"].serve, _swaggerUiExpress["default"].setup(_swagger["default"]));
 app.use(_express["default"].urlencoded({
   extended: true
 }));
