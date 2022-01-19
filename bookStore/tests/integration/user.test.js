@@ -67,4 +67,54 @@ describe('Admin APIs Test', () => {
       });
     });
   });
+
+  describe('Login Api', () => {
+    it('GivenloginDetails_WhennotRegistered_shouldNotLogin', (done) => {
+      const login = {
+        email: "bharathmighty@gmail.com",
+        password: "bharath@248"
+      };
+      chai
+      .request(app)
+      .post('/api/v1/users/login')
+      .send(login)
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property("message").eql("Not Registered Yet");
+        done();
+      });
+    });
+
+    it('GivenloginDetails_WhenIncorrectPassword_shouldNotLogin', (done) => {
+      const login = {
+        email: "bharathmighty248@gmail.com",
+        password: "bharath@24"
+      };
+      chai
+      .request(app)
+      .post('/api/v1/users/login')
+      .send(login)
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property("message").eql("Incorrect Password");
+        done();
+      });
+    });
+
+    it('GivenloginDetails_WhenCorrect_shouldLogin', (done) => {
+      const login = {
+        email: "bharathmighty248@gmail.com",
+        password: "bharath@248"
+      };
+      chai
+      .request(app)
+      .post('/api/v1/users/login')
+      .send(login)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property("message").eql("Login Successful");
+        done();
+      });
+    });
+  });
 });
