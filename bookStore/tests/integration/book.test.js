@@ -126,4 +126,74 @@ describe('Book APIs Test', () => {
         });
     });
   });
+
+  describe('Update Book Api', () => {
+    it('GivenBookInfo_WhenUserTokenProvided_shouldReturnAdminOnlyHasPermission', (done) => {
+        const usertoken = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczIwQGdtYWlsLmNvbSIsImlkIjoiNjFlN2JkY2QzOTBkZGQwOTk0ODhjNTVjIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE2NDI2MDA1MzN9.YVHUsRY9tMxA0a2oML-i_8l4r7gar-dtj_tieXHBFWs"
+        const info = {
+          author: "bharath",
+          title: "first book title",
+          description: "first book description",
+          quantity: "10",
+          price: "100"
+        };
+        chai
+        .request(app)
+        .put('/api/v1/books/updatebook/61e809e80811ed1178039e5e')
+        .set({ authorization: usertoken })
+        .send(info)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property("message").eql("Only Admin Had this Permissions");
+          done();
+        });
+    });
+    it('GivenupdateInfo_WhenCorrectTokenProvided_shouldReturnBookNotFound', (done) => {
+        const correcttoken = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJoYXJhdGhtaWdodHkyNDhAZ21haWwuY29tIiwiaWQiOiI2MWU2NWFkNjlhN2UxMjI4MTg0YTVjMjAiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2NDI1OTQzMDJ9.RTY6xd9qENkLsT491FktjwtQIA2YhN_ml0XmapfWQ0A"
+        const info = {
+          author: "bharath",
+          title: "first book title",
+          description: "first book description",
+          quantity: "10",
+          price: "100"
+        };
+        chai
+        .request(app)
+        .put('/api/v1/books/updatebook/61e809e80811ed1178039e5e')
+        .set({ authorization: correcttoken })
+        .send(info)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("message").eql("Book Not Found");
+          done();
+        });
+    });
+  })
+
+  describe('Delete Book Api', () => {
+    it('GivenBookInfo_WhenUserTokenProvided_shouldReturnAdminOnlyHasPermission', (done) => {
+        const usertoken = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczIwQGdtYWlsLmNvbSIsImlkIjoiNjFlN2JkY2QzOTBkZGQwOTk0ODhjNTVjIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE2NDI2MDA1MzN9.YVHUsRY9tMxA0a2oML-i_8l4r7gar-dtj_tieXHBFWs"
+        chai
+        .request(app)
+        .delete('/api/v1/books/deletebook/61e809e80811ed1178039e5e')
+        .set({ authorization: usertoken })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property("message").eql("Only Admin Had this Permissions");
+          done();
+        });
+    });
+    it('GivenDeleteInfo_WhenCorrectTokenProvided_shouldReturnBookNotFound', (done) => {
+        const correcttoken = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJoYXJhdGhtaWdodHkyNDhAZ21haWwuY29tIiwiaWQiOiI2MWU2NWFkNjlhN2UxMjI4MTg0YTVjMjAiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2NDI1OTQzMDJ9.RTY6xd9qENkLsT491FktjwtQIA2YhN_ml0XmapfWQ0A"
+        chai
+        .request(app)
+        .delete('/api/v1/books/deletebook/61e809e80811ed1178039e5e')
+        .set({ authorization: correcttoken })
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("message").eql("Book Not Found");
+          done();
+        });
+    });
+  })
 });
