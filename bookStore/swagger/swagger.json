@@ -238,6 +238,61 @@
                     }
                 }
             }
+        },
+        "/books/updatebook/{bookId}": {
+            "put": {
+                "tags": ["Update Book"],
+                "description": "Update Books in the store",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Token for Authentication..! Please Enter a token along with bearer [bearer ]..",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "bookId",
+                        "description": "Enter Book Id",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    },
+                    {
+                        "name": "update book",
+                        "in": "body",
+                        "description": "book details",
+                        "schema": {
+                            "$ref": "#/definitions/bookinfo"
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "schema": {
+                    "$ref": "#/definitions/bookinfo"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Book updated successfully"
+                    },
+                    "400": {
+                        "description": "Authorization token is required"
+                    },
+                    "401": {
+                        "description": "Authorization Failed (or) Only Admin Had this Permissions"
+                    },
+                    "404": {
+                        "description": "Book Not Found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
