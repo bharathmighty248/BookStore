@@ -21,6 +21,10 @@ const bookSchema = new Schema(
     quantity: {
         type: Number,
         required: true
+    },
+    status: {
+        type: String,
+        default: "Available"
     }
   }
 );
