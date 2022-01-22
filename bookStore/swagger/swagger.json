@@ -337,6 +337,53 @@
                     }
                 }
             }
+        },
+
+        "/carts/addtocart": {
+            "put": {
+                "tags": ["Add To Cart"],
+                "description": "Want to purchase? Add to the cart..",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Token for Authentication..! Please Enter a token along with bearer [bearer ]..",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    },
+                    {
+                        "in": "body",
+                        "name": "book info",
+                        "description": "Give book details",
+                        "schema": {
+                            "$ref": "#/definitions/cartinfo"
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "schema": {
+                    "$ref": "#/definitions/cartinfo"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Book added into cart successfully (or) stock is not available, please reduce order quantity"
+                    },
+                    "307": {
+                        "description": "Sold Out"
+                    },
+                    "400": {
+                        "description": "Authorization token is required"
+                    },
+                    "401": {
+                        "description": "Authorization Failed"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -422,6 +469,19 @@
                 "price": {
                     "type": "number",
                     "description": "price of book"
+                }
+            }
+        },
+        "cartinfo": {
+            "type": "object",
+            "properties": {
+                "bookId": {
+                    "type": "string",
+                    "description": "Give bookId"
+                },
+                "quantity": {
+                    "type": "number",
+                    "description": "How many books you want to buy"
                 }
             }
         }
