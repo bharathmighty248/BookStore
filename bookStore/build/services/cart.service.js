@@ -15,7 +15,7 @@ var _cart = _interopRequireDefault(require("../models/cart.model"));
 
 var _book = _interopRequireDefault(require("../models/book.model"));
 
-//Add book 
+//Add To Cart
 var addtocart = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(info) {
     var available, usercart, cart, remainingqty, bookpresent, newbook, newcart, totalAmount, _remainingqty, oldqty, newqty, _newbook, _newcart, _totalAmount, _remainingqty2;
