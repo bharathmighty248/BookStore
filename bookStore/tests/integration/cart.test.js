@@ -83,4 +83,59 @@ describe('Cart APIs Test', () => {
             });
           });
     });
+    describe("Remove From Cart Api", () => {
+      it('GivenNewUserToken&BookInfo_WhenThatUserDoesntHaveCart_shouldreturnSame', (done) => {
+        const info = {
+          bookId: "61eae6b4f45107366c80a9ba",
+          quantity: 5,
+        };
+        const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczAyMEBnbWFpbC5jb20iLCJpZCI6IjYxZWQxMTIyYzI1MjFlNGJhYzE0MDdkNCIsInJvbGUiOiJVc2VyIiwiaWF0IjoxNjQyOTI2MzkyfQ.bYcSkTe2V6zIHFNgJW4a20LmpCfHBajNTCrG3jxMSrA"
+        chai
+        .request(app)
+        .put('/api/v1/carts/removefromcart')
+        .set({ authorization: token })
+        .send(info)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("message").eql("Cart not Found");
+          done();
+        });
+      });
+
+      it('GivenBookInfo_WhenThatUserHaveCartButBookisnotPresent_shouldreturnSame', (done) => {
+        const info = {
+          bookId: "61eae6b4f45107366c80a9bb",
+          quantity: 5,
+        };
+        const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczIwQGdtYWlsLmNvbSIsImlkIjoiNjFlN2JkY2QzOTBkZGQwOTk0ODhjNTVjIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE2NDI3NTcyMzV9.wc72Gbt4E5kT4eO64Rhz33EIGn8RKMO8KHVEs8BJims"
+        chai
+        .request(app)
+        .put('/api/v1/carts/removefromcart')
+        .set({ authorization: token })
+        .send(info)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("message").eql("Book is not in the cart");
+          done();
+        });
+      });
+
+      it('GivenBookInfo_WhenThatUserHaveCartAndBookisPresent_shouldreturnRemovedFromCart', (done) => {
+        const info = {
+          bookId: "61eae6b4f45107366c80a9ba",
+          quantity: 5,
+        };
+        const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczIwQGdtYWlsLmNvbSIsImlkIjoiNjFlN2JkY2QzOTBkZGQwOTk0ODhjNTVjIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE2NDI3NTcyMzV9.wc72Gbt4E5kT4eO64Rhz33EIGn8RKMO8KHVEs8BJims"
+        chai
+        .request(app)
+        .put('/api/v1/carts/removefromcart')
+        .set({ authorization: token })
+        .send(info)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("message").eql("Book removed from cart Successfully");
+          done();
+        });
+      });
+    });
 });
