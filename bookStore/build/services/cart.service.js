@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.addtocart = void 0;
+exports.removefromcart = exports.addtocart = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -322,6 +322,262 @@ var addtocart = /*#__PURE__*/function () {
   return function addtocart(_x) {
     return _ref.apply(this, arguments);
   };
-}();
+}(); //Remove From Cart
+
 
 exports.addtocart = addtocart;
+
+var removefromcart = /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(info) {
+    var usercart, bookpresent, oldqty, newcart, totalAmount, available, newqty, newbook, _newcart2, _totalAmount2, _oldqty, _newcart3, _totalAmount3;
+
+    return _regenerator["default"].wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return _cart["default"].findOne({
+              userId: info.userId
+            });
+
+          case 3:
+            usercart = _context2.sent;
+
+            if (!usercart) {
+              _context2.next = 62;
+              break;
+            }
+
+            _context2.next = 7;
+            return _cart["default"].findOne({
+              userId: info.userId,
+              "books.bookId": info.bookId
+            });
+
+          case 7:
+            bookpresent = _context2.sent;
+
+            if (!bookpresent) {
+              _context2.next = 59;
+              break;
+            }
+
+            if (!(info.bookId && info.quantity !== undefined)) {
+              _context2.next = 45;
+              break;
+            }
+
+            oldqty = bookpresent.books.filter(function (book) {
+              return book.bookId == info.bookId;
+            })[0].quantity;
+
+            if (!(info.quantity >= oldqty)) {
+              _context2.next = 25;
+              break;
+            }
+
+            _context2.next = 14;
+            return _cart["default"].updateOne({
+              userId: info.userId
+            }, {
+              $pull: {
+                books: {
+                  bookId: info.bookId
+                }
+              }
+            });
+
+          case 14:
+            _context2.next = 16;
+            return _cart["default"].findOne({
+              userId: info.userId
+            });
+
+          case 16:
+            newcart = _context2.sent;
+            totalAmount = newcart.books.map(function (book) {
+              return book.total;
+            }).reduce(function (acc, curr) {
+              return acc + curr;
+            }, 0);
+            _context2.next = 20;
+            return _cart["default"].findOneAndUpdate({
+              userId: info.userId
+            }, {
+              totalAmount: totalAmount
+            });
+
+          case 20:
+            _context2.next = 22;
+            return _book["default"].updateOne({
+              _id: info.bookId
+            }, {
+              $inc: {
+                quantity: oldqty
+              },
+              status: "Available"
+            });
+
+          case 22:
+            return _context2.abrupt("return", true);
+
+          case 25:
+            _context2.next = 27;
+            return _book["default"].findOne({
+              _id: info.bookId
+            });
+
+          case 27:
+            available = _context2.sent;
+            newqty = oldqty - info.quantity;
+            _context2.next = 31;
+            return _cart["default"].updateOne({
+              userId: info.userId
+            }, {
+              $pull: {
+                books: {
+                  bookId: info.bookId
+                }
+              }
+            });
+
+          case 31:
+            newbook = {
+              bookId: info.bookId,
+              quantity: newqty,
+              total: newqty * available.price
+            };
+            _context2.next = 34;
+            return _cart["default"].findOneAndUpdate({
+              userId: info.userId
+            }, {
+              $addToSet: {
+                books: newbook
+              }
+            });
+
+          case 34:
+            _context2.next = 36;
+            return _cart["default"].findOne({
+              userId: info.userId
+            });
+
+          case 36:
+            _newcart2 = _context2.sent;
+            _totalAmount2 = _newcart2.books.map(function (book) {
+              return book.total;
+            }).reduce(function (acc, curr) {
+              return acc + curr;
+            }, 0);
+            _context2.next = 40;
+            return _cart["default"].findOneAndUpdate({
+              userId: info.userId
+            }, {
+              totalAmount: _totalAmount2
+            });
+
+          case 40:
+            _context2.next = 42;
+            return _book["default"].updateOne({
+              _id: info.bookId
+            }, {
+              $inc: {
+                quantity: info.quantity
+              },
+              status: "Available"
+            });
+
+          case 42:
+            return _context2.abrupt("return", true);
+
+          case 43:
+            _context2.next = 57;
+            break;
+
+          case 45:
+            _oldqty = bookpresent.books.filter(function (book) {
+              return book.bookId == info.bookId;
+            })[0].quantity;
+            _context2.next = 48;
+            return _cart["default"].updateOne({
+              userId: info.userId
+            }, {
+              $pull: {
+                books: {
+                  bookId: info.bookId
+                }
+              }
+            });
+
+          case 48:
+            _context2.next = 50;
+            return _cart["default"].findOne({
+              userId: info.userId
+            });
+
+          case 50:
+            _newcart3 = _context2.sent;
+            _totalAmount3 = _newcart3.books.map(function (book) {
+              return book.total;
+            }).reduce(function (acc, curr) {
+              return acc + curr;
+            }, 0);
+            _context2.next = 54;
+            return _cart["default"].findOneAndUpdate({
+              userId: info.userId
+            }, {
+              totalAmount: _totalAmount3
+            });
+
+          case 54:
+            _context2.next = 56;
+            return _book["default"].updateOne({
+              _id: info.bookId
+            }, {
+              $inc: {
+                quantity: _oldqty
+              },
+              status: "Available"
+            });
+
+          case 56:
+            return _context2.abrupt("return", true);
+
+          case 57:
+            _context2.next = 60;
+            break;
+
+          case 59:
+            return _context2.abrupt("return", "Book not found");
+
+          case 60:
+            _context2.next = 63;
+            break;
+
+          case 62:
+            return _context2.abrupt("return", "Cart not Found");
+
+          case 63:
+            _context2.next = 68;
+            break;
+
+          case 65:
+            _context2.prev = 65;
+            _context2.t0 = _context2["catch"](0);
+            throw _context2.t0;
+
+          case 68:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 65]]);
+  }));
+
+  return function removefromcart(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+exports.removefromcart = removefromcart;

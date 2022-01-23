@@ -90,3 +90,55 @@ export const addtocart = async (info) => {
         throw error;
     }
 };
+
+//Remove From Cart
+export const removefromcart = async (info) => {
+    try {
+        const usercart = await Cart.findOne({userId:info.userId});
+        if (usercart) {
+            const bookpresent = await Cart.findOne({ userId:info.userId, "books.bookId":info.bookId });
+            if (bookpresent) {
+                if (info.bookId && info.quantity !== undefined) {
+                    const oldqty = bookpresent.books.filter((book) => { return book.bookId==info.bookId })[0].quantity;
+                    if (info.quantity >= oldqty) {
+                        await Cart.updateOne({ userId: info.userId }, { $pull: { books: { bookId: info.bookId } } });
+                        const newcart = await Cart.findOne({userId:info.userId});
+                        const totalAmount = newcart.books.map((book) => book.total).reduce(((acc,curr) => acc+curr), 0);
+                        await Cart.findOneAndUpdate({userId:info.userId},{totalAmount: totalAmount});
+                        await Book.updateOne({_id:info.bookId},{$inc:{quantity:oldqty},status: "Available"});
+                        return true;
+                    } else {
+                        const available = await Book.findOne({_id: info.bookId});
+                        const newqty = oldqty - info.quantity;
+                        await Cart.updateOne({ userId: info.userId }, { $pull: { books: { bookId: info.bookId } } });
+                        const newbook = {
+                            bookId: info.bookId,
+                            quantity: newqty,
+                            total: newqty * available.price
+                        };
+                        await Cart.findOneAndUpdate({userId:info.userId},{$addToSet: {books: newbook}});
+                        const newcart = await Cart.findOne({userId:info.userId});
+                        const totalAmount = newcart.books.map((book) => book.total).reduce(((acc,curr) => acc+curr), 0);
+                        await Cart.findOneAndUpdate({userId:info.userId},{totalAmount: totalAmount});
+                        await Book.updateOne({_id:info.bookId},{$inc:{quantity:info.quantity},status: "Available"});
+                        return true;
+                    }
+                } else {
+                    const oldqty = bookpresent.books.filter((book) => { return book.bookId==info.bookId })[0].quantity;
+                    await Cart.updateOne({ userId: info.userId }, { $pull: { books: { bookId: info.bookId } } });
+                    const newcart = await Cart.findOne({userId:info.userId});
+                    const totalAmount = newcart.books.map((book) => book.total).reduce(((acc,curr) => acc+curr), 0);
+                    await Cart.findOneAndUpdate({userId:info.userId},{totalAmount: totalAmount});
+                    await Book.updateOne({_id:info.bookId},{$inc:{quantity:oldqty},status: "Available"});
+                    return true;
+                }
+            } else {
+                return "Book not found";
+            }
+        } else {
+            return "Cart not Found";
+        }
+    } catch (error) {
+        throw error;
+    }
+};
