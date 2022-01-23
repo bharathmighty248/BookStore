@@ -138,4 +138,30 @@ describe('Cart APIs Test', () => {
         });
       });
     });
+    describe("View Cart by user Api", () => {
+      it('GivenNewUserToken_WhenThatUserDoesntHaveCart_shouldreturnSame', (done) => {
+        const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczAyMEBnbWFpbC5jb20iLCJpZCI6IjYxZWQxMTIyYzI1MjFlNGJhYzE0MDdkNCIsInJvbGUiOiJVc2VyIiwiaWF0IjoxNjQyOTI2MzkyfQ.bYcSkTe2V6zIHFNgJW4a20LmpCfHBajNTCrG3jxMSrA"
+        chai
+        .request(app)
+        .get('/api/v1/carts/viewcart')
+        .set({ authorization: token })
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("message").eql("Cart not Found, Start by adding books in to new cart");
+          done();
+        });
+      });
+      it('GivenUserToken_WhenThatUserHaveEmptyCart_shouldreturnSame', (done) => {
+        const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczIwQGdtYWlsLmNvbSIsImlkIjoiNjFlN2JkY2QzOTBkZGQwOTk0ODhjNTVjIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE2NDI3NTcyMzV9.wc72Gbt4E5kT4eO64Rhz33EIGn8RKMO8KHVEs8BJims"
+        chai
+        .request(app)
+        .get('/api/v1/carts/viewcart')
+        .set({ authorization: token })
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("message").eql("Your cart is empty!");
+          done();
+        });
+      });
+    });
 });
