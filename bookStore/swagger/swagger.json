@@ -430,6 +430,41 @@
                     }
                 }
             }
+        },
+        "/carts/viewcart": {
+            "get": {
+                "tags": ["View Cart"],
+                "description": "Want to view cart? ok ..",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Token for Authentication..! Please Enter a token along with bearer [bearer ]..",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Your cart.."
+                    },
+                    "400": {
+                        "description": "Authorization token is required"
+                    },
+                    "401": {
+                        "description": "Authorization Failed"
+                    },
+                    "404": {
+                        "description": "Cart Not Found (or) Your cart is empty!"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
