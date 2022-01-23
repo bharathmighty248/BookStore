@@ -384,6 +384,52 @@
                     }
                 }
             }
+        },
+        "/carts/removefromcart": {
+            "put": {
+                "tags": ["Remove From Cart"],
+                "description": "Want to remove books from cart? ok ..",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Token for Authentication..! Please Enter a token along with bearer [bearer ]..",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    },
+                    {
+                        "in": "body",
+                        "name": "book info",
+                        "description": "Give book details",
+                        "schema": {
+                            "$ref": "#/definitions/cartinfo"
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "schema": {
+                    "$ref": "#/definitions/cartinfo"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Book removed from cart Successfully"
+                    },
+                    "400": {
+                        "description": "Authorization token is required"
+                    },
+                    "401": {
+                        "description": "Authorization Failed"
+                    },
+                    "404": {
+                        "description": "Cart Not Found (or) Book Not Found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -481,7 +527,7 @@
                 },
                 "quantity": {
                     "type": "number",
-                    "description": "How many books you want to buy"
+                    "description": "How many books you want to buy or remove"
                 }
             }
         }
