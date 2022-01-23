@@ -70,3 +70,37 @@ export const removefromcart = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * Controller to view his Cart by the user
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+ export const viewcart = async (req, res, next) => {
+    try {
+        const info = {
+            userId: req.user.id
+        }
+        const data = await CartService.viewcart(info);
+        if (data == "Empty cart") {
+            res.status(HttpStatus.NOT_FOUND).json({
+                code: HttpStatus.NOT_FOUND,
+                message: 'Your cart is empty!'
+            });
+        } else if (data == "Cart not Found") {
+            res.status(HttpStatus.NOT_FOUND).json({
+                code: HttpStatus.NOT_FOUND,
+                message: 'Cart not Found, Start by adding books in to new cart'
+            });
+        } else {
+            res.status(HttpStatus.OK).json({
+                code: HttpStatus.OK,
+                message: 'Your cart..',
+                data
+            });
+        }
+    } catch (error) {
+      next(error);
+    }
+  };

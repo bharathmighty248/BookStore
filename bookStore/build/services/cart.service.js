@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.removefromcart = exports.addtocart = void 0;
+exports.viewcart = exports.removefromcart = exports.addtocart = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -578,6 +578,71 @@ var removefromcart = /*#__PURE__*/function () {
   return function removefromcart(_x2) {
     return _ref2.apply(this, arguments);
   };
-}();
+}(); //View Cart by user
+
 
 exports.removefromcart = removefromcart;
+
+var viewcart = /*#__PURE__*/function () {
+  var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(info) {
+    var usercart, books;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            _context3.next = 3;
+            return _cart["default"].findOne({
+              userId: info.userId
+            });
+
+          case 3:
+            usercart = _context3.sent;
+
+            if (!usercart) {
+              _context3.next = 13;
+              break;
+            }
+
+            books = usercart.books.length;
+
+            if (!(books == 0)) {
+              _context3.next = 10;
+              break;
+            }
+
+            return _context3.abrupt("return", "Empty cart");
+
+          case 10:
+            return _context3.abrupt("return", usercart);
+
+          case 11:
+            _context3.next = 14;
+            break;
+
+          case 13:
+            return _context3.abrupt("return", "Cart not Found");
+
+          case 14:
+            _context3.next = 19;
+            break;
+
+          case 16:
+            _context3.prev = 16;
+            _context3.t0 = _context3["catch"](0);
+            throw _context3.t0;
+
+          case 19:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, null, [[0, 16]]);
+  }));
+
+  return function viewcart(_x3) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
+exports.viewcart = viewcart;

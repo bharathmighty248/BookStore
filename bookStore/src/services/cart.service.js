@@ -142,3 +142,22 @@ export const removefromcart = async (info) => {
         throw error;
     }
 };
+
+//View Cart by user
+export const viewcart = async (info) => {
+    try {
+        const usercart = await Cart.findOne({userId:info.userId});
+        if (usercart) {
+            const books = usercart.books.length;
+            if (books == 0) {
+                return "Empty cart";
+            } else {
+                return usercart;
+            }
+        } else {
+            return "Cart not Found";
+        }
+    } catch (error) {
+        throw error;
+    }
+};
