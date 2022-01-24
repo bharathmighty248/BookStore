@@ -1,5 +1,6 @@
 import Cart from '../models/cart.model';
 import Book from '../models/book.model';
+import { sendOrderConfirmation } from '../utils/user.util';
 
 //Add To Cart
 export const addtocart = async (info) => {
@@ -161,3 +162,34 @@ export const viewcart = async (info) => {
         throw error;
     }
 };
+
+// Place Order
+export const placeorder = async (info) => {
+    try {
+        const usercart = await Cart.findOne({userId:info.userId});
+        if (usercart) {
+            const books = usercart.books.length;
+            if (books == 0) {
+                return "Empty cart";
+            } else {
+                const cartdetails = await Cart.findOneAndUpdate({userId:info.userId}, {isPurchased: true}, {new: true});
+                const orderdetails = {
+                    email: info.email,
+                    address: info.address,
+                    paymentMode: info.paymentmode,
+                    books: cartdetails.books,
+                    totalAmount: cartdetails.totalAmount
+                }
+                sendOrderConfirmation(orderdetails);
+                const newcart = await Cart.findOneAndUpdate({userId:info.userId},{isPurchased: false,books:[]},{ new: true});
+                const totalAmount = newcart.books.map((book) => book.total).reduce(((acc,curr) => acc+curr), 0);
+                await Cart.findOneAndUpdate({userId:info.userId},{totalAmount: totalAmount});
+                return true;
+            }
+        } else {
+            return "Cart not Found";
+        }
+    } catch (error) {
+        throw error;
+    }
+}

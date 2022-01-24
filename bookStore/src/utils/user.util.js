@@ -46,3 +46,28 @@ const transporter = nodemailer.createTransport({
         text: `Your Password reset is successfull. Use this new password for future actions`
     });
   };
+
+/**
+ * utility to sendPlaceOrder
+ *
+ * @param {object} details
+ */
+ export const sendOrderConfirmation = (details) => {
+    transporter.sendMail({
+        from: "'Book-Store'<bookstore-account@bookstore.com>",
+        to: details.email,
+        subject: "Order confirmation",
+        text: `Hello Happy Customer,
+        Thank you for shoping with us. Your order is placed successfully.
+        order Details:
+                        Email: ${details.email}
+                        Delivary address: ${details.address}
+                        Payment mode: ${details.paymentMode}
+                        ordered item(s): ${details.books}
+                        Order Total: Rs.${details.totalAmount}.00
+
+        We hope to see you again soon.
+        BOOKSTORE.In
+        `
+    });
+  };

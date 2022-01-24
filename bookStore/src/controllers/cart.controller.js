@@ -104,3 +104,39 @@ export const removefromcart = async (req, res, next) => {
       next(error);
     }
   };
+
+/**
+ * Controller to Place Order
+ * @param {object} req - request object
+ * @param {object} res - response object
+ * @param {function} next - callback to error middleware
+ */
+export const placeorder = async (req, res, next) => {
+    try {
+        const info = {
+            userId: req.user.id,
+            email: req.user.email,
+            address: req.body.address,
+            paymentmode: req.body.paymentmode
+        }
+        const data = await CartService.placeorder(info);
+        if (data == "Empty cart") {
+            res.status(HttpStatus.NOT_FOUND).json({
+                code: HttpStatus.NOT_FOUND,
+                message: 'Your cart is empty!'
+            });
+        } else if (data == "Cart not Found") {
+            res.status(HttpStatus.NOT_FOUND).json({
+                code: HttpStatus.NOT_FOUND,
+                message: 'Cart not Found, Start by adding books in to new cart'
+            });
+        } else {
+            res.status(HttpStatus.OK).json({
+                code: HttpStatus.OK,
+                message: 'Order placed successfully'
+            });
+        }
+    } catch (error) {
+        next(error);
+    }
+}

@@ -26,6 +26,8 @@ router.put('/addtocart', _auth.auth, cartController.addtocart); // route to remo
 
 router.put('/removefromcart', _auth.auth, cartController.removefromcart); // route to veiw his Cart by the user
 
-router.get('/viewcart', _auth.auth, cartController.viewcart);
+router.get('/viewcart', _auth.auth, cartController.viewcart); // route to place order
+
+router.put('/placeorder', _auth.auth, cartController.placeorder);
 var _default = router;
 exports["default"] = _default;

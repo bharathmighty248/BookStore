@@ -13,4 +13,7 @@ router.put('/removefromcart', auth, cartController.removefromcart);
 // route to veiw his Cart by the user
 router.get('/viewcart', auth, cartController.viewcart);
 
+// route to place order
+router.put('/placeorder', auth, cartController.placeorder);
+
 export default router;

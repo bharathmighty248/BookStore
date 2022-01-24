@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.viewcart = exports.removefromcart = exports.addtocart = void 0;
+exports.viewcart = exports.removefromcart = exports.placeorder = exports.addtocart = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -14,6 +14,8 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 var _cart = _interopRequireDefault(require("../models/cart.model"));
 
 var _book = _interopRequireDefault(require("../models/book.model"));
+
+var _user = require("../utils/user.util");
 
 //Add To Cart
 var addtocart = /*#__PURE__*/function () {
@@ -643,6 +645,115 @@ var viewcart = /*#__PURE__*/function () {
   return function viewcart(_x3) {
     return _ref3.apply(this, arguments);
   };
-}();
+}(); // Place Order
+
 
 exports.viewcart = viewcart;
+
+var placeorder = /*#__PURE__*/function () {
+  var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(info) {
+    var usercart, books, cartdetails, orderdetails, newcart, totalAmount;
+    return _regenerator["default"].wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            _context4.next = 3;
+            return _cart["default"].findOne({
+              userId: info.userId
+            });
+
+          case 3:
+            usercart = _context4.sent;
+
+            if (!usercart) {
+              _context4.next = 24;
+              break;
+            }
+
+            books = usercart.books.length;
+
+            if (!(books == 0)) {
+              _context4.next = 10;
+              break;
+            }
+
+            return _context4.abrupt("return", "Empty cart");
+
+          case 10:
+            _context4.next = 12;
+            return _cart["default"].findOneAndUpdate({
+              userId: info.userId
+            }, {
+              isPurchased: true
+            }, {
+              "new": true
+            });
+
+          case 12:
+            cartdetails = _context4.sent;
+            orderdetails = {
+              email: info.email,
+              address: info.address,
+              paymentMode: info.paymentmode,
+              books: cartdetails.books,
+              totalAmount: cartdetails.totalAmount
+            };
+            (0, _user.sendOrderConfirmation)(orderdetails);
+            _context4.next = 17;
+            return _cart["default"].findOneAndUpdate({
+              userId: info.userId
+            }, {
+              isPurchased: false,
+              books: []
+            }, {
+              "new": true
+            });
+
+          case 17:
+            newcart = _context4.sent;
+            totalAmount = newcart.books.map(function (book) {
+              return book.total;
+            }).reduce(function (acc, curr) {
+              return acc + curr;
+            }, 0);
+            _context4.next = 21;
+            return _cart["default"].findOneAndUpdate({
+              userId: info.userId
+            }, {
+              totalAmount: totalAmount
+            });
+
+          case 21:
+            return _context4.abrupt("return", true);
+
+          case 22:
+            _context4.next = 25;
+            break;
+
+          case 24:
+            return _context4.abrupt("return", "Cart not Found");
+
+          case 25:
+            _context4.next = 30;
+            break;
+
+          case 27:
+            _context4.prev = 27;
+            _context4.t0 = _context4["catch"](0);
+            throw _context4.t0;
+
+          case 30:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, null, [[0, 27]]);
+  }));
+
+  return function placeorder(_x4) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+
+exports.placeorder = placeorder;
