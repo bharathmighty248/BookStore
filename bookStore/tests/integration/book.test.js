@@ -170,6 +170,30 @@ describe('Book APIs Test', () => {
     });
   })
 
+  describe('Search Book Api', () => {
+    it('WhenSearchBookByTitle_IfFound_shouldReturnBook', (done) => {
+        chai
+        .request(app)
+        .get('/api/v1/books/searchbook/first book title')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("message").eql("search results");
+          done();
+        });
+    });
+
+    it('WhenSearchBookByTitle_IfNotFound_shouldReturnNotFound', (done) => {
+      chai
+      .request(app)
+      .get('/api/v1/books/searchbook/first book')
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property("message").eql("Book Not Found");
+        done();
+      });
+  });
+  });
+
   describe('Delete Book Api', () => {
     it('GivenBookInfo_WhenUserTokenProvided_shouldReturnAdminOnlyHasPermission', (done) => {
         const usertoken = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczIwQGdtYWlsLmNvbSIsImlkIjoiNjFlN2JkY2QzOTBkZGQwOTk0ODhjNTVjIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE2NDI2MDA1MzN9.YVHUsRY9tMxA0a2oML-i_8l4r7gar-dtj_tieXHBFWs"
