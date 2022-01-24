@@ -133,7 +133,7 @@ export const placeorder = async (req, res, next) => {
         } else {
             res.status(HttpStatus.OK).json({
                 code: HttpStatus.OK,
-                message: 'Order placed successfully'
+                message: 'Order placed successfully, You will get order conirmation email shortly'
             });
         }
     } catch (error) {
