@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updatebook = exports.getallbooks = exports.deletebook = exports.addbook = void 0;
+exports.updatebook = exports.searchbook = exports.getallbooks = exports.deletebook = exports.addbook = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -229,6 +229,42 @@ var deletebook = /*#__PURE__*/function () {
   return function deletebook(_x3) {
     return _ref4.apply(this, arguments);
   };
-}();
+}(); //Search book 
+
 
 exports.deletebook = deletebook;
+
+var searchbook = /*#__PURE__*/function () {
+  var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(info) {
+    return _regenerator["default"].wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.prev = 0;
+            _context5.next = 3;
+            return _book["default"].find({
+              title: info
+            });
+
+          case 3:
+            return _context5.abrupt("return", _context5.sent);
+
+          case 6:
+            _context5.prev = 6;
+            _context5.t0 = _context5["catch"](0);
+            return _context5.abrupt("return", _context5.t0);
+
+          case 9:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5, null, [[0, 6]]);
+  }));
+
+  return function searchbook(_x4) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+
+exports.searchbook = searchbook;

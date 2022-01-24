@@ -57,3 +57,12 @@ export const deletebook = async (info) => {
         return error;
     }
 };
+
+//Search book 
+export const searchbook = async (info) => {
+    try {
+        return await Book.find({title:info});
+    } catch (error) {
+        return error;
+    }
+};

@@ -113,3 +113,30 @@ export const deletebook = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * Controller to Get all books
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+ export const searchbook = async (req, res, next) => {
+  try {
+    const info = req.params.title
+    const data = await BookService.searchbook(info);
+    if (data.length != 0) {
+        res.status(HttpStatus.OK).json({
+            code: HttpStatus.OK,
+            message: 'search results',
+            data
+        });
+    } else {
+      res.status(HttpStatus.NOT_FOUND).json({
+        code: HttpStatus.NOT_FOUND,
+        message: 'Book Not Found'
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};

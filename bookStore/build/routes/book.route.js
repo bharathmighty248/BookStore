@@ -28,6 +28,8 @@ router.get('/getallbooks', bookController.getallbooks); // route to update book
 
 router.put('/updatebook/:bookId', _auth.auth, _auth.verifyRole, bookController.updatebook); // route to delete book
 
-router["delete"]('/deletebook/:bookId', _auth.auth, _auth.verifyRole, bookController.deletebook);
+router["delete"]('/deletebook/:bookId', _auth.auth, _auth.verifyRole, bookController.deletebook); // route to Search Book
+
+router.get('/searchbook/:title', bookController.searchbook);
 var _default = router;
 exports["default"] = _default;
