@@ -465,6 +465,52 @@
                     }
                 }
             }
+        },
+        "/carts/placeorder": {
+            "put": {
+                "tags": ["Place Order"],
+                "description": "Want to place order..?",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Token for Authentication..! Please Enter a token along with bearer [bearer ]..",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    },
+                    {
+                        "in": "body",
+                        "name": "order details",
+                        "description": "Please give order info",
+                        "schema": {
+                            "$ref": "#/definitions/orderinfo"
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "schema": {
+                    "$ref": "#/definitions/orderinfo"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Order placed successfully, You will get order conirmation email shortly"
+                    },
+                    "400": {
+                        "description": "Authorization token is required"
+                    },
+                    "401": {
+                        "description": "Authorization Failed"
+                    },
+                    "404": {
+                        "description": "Cart Not Found (or) Your cart is empty!"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -563,6 +609,19 @@
                 "quantity": {
                     "type": "number",
                     "description": "How many books you want to buy or remove"
+                }
+            }
+        },
+        "orderinfo": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "description": "Delivery Address"
+                },
+                "paymentmode": {
+                    "type": "string",
+                    "description": "Payment mode Card/COD"
                 }
             }
         }

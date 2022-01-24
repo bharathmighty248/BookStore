@@ -257,7 +257,7 @@ var placeorder = /*#__PURE__*/function () {
             } else {
               res.status(_httpStatusCodes["default"].OK).json({
                 code: _httpStatusCodes["default"].OK,
-                message: 'Order placed successfully'
+                message: 'Order placed successfully, You will get order conirmation email shortly'
               });
             }
 
