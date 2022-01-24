@@ -339,6 +339,33 @@
             }
         },
 
+        "/books/searchbook/{title}": {
+            "get": {
+                "tags": ["Search Book"],
+                "description": "Search book by Title",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "title",
+                        "description": "Search by title of the book",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Search results"
+                    },
+                    "404": {
+                        "description": "No book found"
+                    }
+                }
+            }
+        },
+
         "/carts/addtocart": {
             "put": {
                 "tags": ["Add To Cart"],
