@@ -15,6 +15,8 @@ var _book = _interopRequireDefault(require("./book.route"));
 
 var _cart = _interopRequireDefault(require("./cart.route"));
 
+var _wishlist = _interopRequireDefault(require("./wishlist.route"));
+
 var router = _express["default"].Router();
 
 /**
@@ -29,6 +31,7 @@ var routes = function routes() {
   router.use('/users', _user["default"]);
   router.use('/books', _book["default"]);
   router.use('/carts', _cart["default"]);
+  router.use('/wishlist', _wishlist["default"]);
   return router;
 };
 
