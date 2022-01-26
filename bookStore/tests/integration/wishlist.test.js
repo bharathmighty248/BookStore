@@ -81,6 +81,32 @@ describe('Wishlist APIs Test', () => {
             });
         });
     });
+    describe("My Wishlist Api",() => {
+      it("WhenGivenUserToken_IfNotAvailableWishlist_ShouldReturnSame", (done) => {
+        const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczAyMEBnbWFpbC5jb20iLCJpZCI6IjYxZWQxMTIyYzI1MjFlNGJhYzE0MDdkNCIsInJvbGUiOiJVc2VyIiwiaWF0IjoxNjQzMTk3OTgzfQ.FbCVSLJ6dk9A48VTOQZfLrFR1DAo4n0D9OoK_v3qLHo"
+        chai
+        .request(app)
+        .get('/api/v1/wishlist/mywishlist')
+        .set({ authorization: token })
+        .end((err, res) => {
+            res.should.have.status(404);
+            res.body.should.have.property("message").eql("Wishlist not available or empty");
+          done();
+        });
+      });
+      it("WhenGivenUserToken_IfAvailableWishlist_ShouldReturnWishlist", (done) => {
+        const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczIwQGdtYWlsLmNvbSIsImlkIjoiNjFlN2JkY2QzOTBkZGQwOTk0ODhjNTVjIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE2NDI3NTcyMzV9.wc72Gbt4E5kT4eO64Rhz33EIGn8RKMO8KHVEs8BJims"
+        chai
+        .request(app)
+        .get('/api/v1/wishlist/mywishlist')
+        .set({ authorization: token })
+        .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("message").eql("Your wishlist..");
+          done();
+        });
+      });
+    });
     describe("Remove from Wishlist Api",() => {
       it("WhenGivenBookInfo_IfItIsNotAvailableInWishlist_ShouldReturnSame", (done) => {
         const info = {
