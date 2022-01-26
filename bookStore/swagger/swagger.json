@@ -633,6 +633,41 @@
                     }
                 }
             }
+        },
+        "/wishlist/mywishlist": {
+            "get": {
+                "tags": ["My Wishlist"],
+                "description": "Want to view your Wishlist? ok ..",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Token for Authentication..! Please Enter a token along with bearer [bearer ]..",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Your Wishlist.."
+                    },
+                    "400": {
+                        "description": "Authorization token is required"
+                    },
+                    "401": {
+                        "description": "Authorization Failed"
+                    },
+                    "404": {
+                        "description": "Wishlist not available or empty"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
