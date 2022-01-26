@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.add = void 0;
+exports.remove = exports.add = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -129,6 +129,100 @@ var add = /*#__PURE__*/function () {
   return function add(_x) {
     return _ref.apply(this, arguments);
   };
-}();
+}(); //Remove from Wishlist
+
 
 exports.add = add;
+
+var remove = /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(info) {
+    var userwishlist, book;
+    return _regenerator["default"].wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return _wishlist["default"].findOne({
+              userId: info.userId
+            });
+
+          case 3:
+            userwishlist = _context2.sent;
+
+            if (!userwishlist) {
+              _context2.next = 19;
+              break;
+            }
+
+            _context2.next = 7;
+            return _wishlist["default"].findOne({
+              userId: info.userId,
+              "books.bookId": info.bookId
+            });
+
+          case 7:
+            book = _context2.sent;
+
+            if (!book) {
+              _context2.next = 16;
+              break;
+            }
+
+            _context2.next = 11;
+            return _wishlist["default"].findOneAndUpdate({
+              userId: info.userId
+            }, {
+              $pull: {
+                books: {
+                  bookId: info.bookId
+                }
+              }
+            });
+
+          case 11:
+            _context2.next = 13;
+            return _wishlist["default"].findOneAndDelete({
+              userId: info.userId,
+              books: {
+                $exists: true,
+                $size: 0
+              }
+            });
+
+          case 13:
+            return _context2.abrupt("return", true);
+
+          case 16:
+            return _context2.abrupt("return", "Not found");
+
+          case 17:
+            _context2.next = 20;
+            break;
+
+          case 19:
+            return _context2.abrupt("return", false);
+
+          case 20:
+            _context2.next = 25;
+            break;
+
+          case 22:
+            _context2.prev = 22;
+            _context2.t0 = _context2["catch"](0);
+            throw _context2.t0;
+
+          case 25:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 22]]);
+  }));
+
+  return function remove(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+exports.remove = remove;

@@ -41,3 +41,24 @@ export const add = async (info) => {
         throw error;
     }
 };
+
+//Remove from Wishlist
+export const remove = async (info) => {
+    try {
+        const userwishlist = await Wishlist.findOne({userId:info.userId});
+        if (userwishlist) {
+            const book = await Wishlist.findOne({userId:info.userId, "books.bookId":info.bookId})
+            if (book) {
+                await Wishlist.findOneAndUpdate({userId:info.userId}, { $pull: { books: { bookId: info.bookId } } });
+                await Wishlist.findOneAndDelete({userId:info.userId,books:{ $exists: true, $size: 0 }});
+                return true;
+            } else {
+                return "Not found";
+            }
+        } else {
+            return false;
+        }
+    } catch (error) {
+        throw error;
+    }
+};
