@@ -10,4 +10,7 @@ router.post('/add', auth, wishlistController.add);
 // route to remove from wishlist
 router.put('/remove', auth, wishlistController.remove);
 
+// route to view myWishlist
+router.get('/mywishlist', auth, wishlistController.mywishlist);
+
 export default router;

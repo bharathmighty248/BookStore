@@ -68,3 +68,32 @@ export const add = async (req, res, next) => {
       next(error);
     }
   };
+
+/**
+ * Controller to view my Wishlist
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+ export const mywishlist = async (req, res, next) => {
+    try {
+        const info = {
+            userId: req.user.id
+        }
+        const data = await WishlistService.mywishlist(info);
+        if (data == false) {
+            res.status(HttpStatus.NOT_FOUND).json({
+                code: HttpStatus.NOT_FOUND,
+                message: 'Wishlist not available or empty'
+            });
+        } else {
+            res.status(HttpStatus.OK).json({
+                code: HttpStatus.OK,
+                message: 'Your wishlist..',
+                data
+            });
+        }
+    } catch (error) {
+      next(error);
+    }
+  };

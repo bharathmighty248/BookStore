@@ -62,3 +62,17 @@ export const remove = async (info) => {
         throw error;
     }
 };
+
+//My Wishlist
+export const mywishlist = async (info) => {
+    try {
+        const userwishlist = await Wishlist.findOne({userId:info.userId});
+        if (userwishlist) {
+            return userwishlist;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        throw error;
+    }
+};

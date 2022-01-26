@@ -24,6 +24,8 @@ var router = _express["default"].Router(); // route to add to wishlist
 
 router.post('/add', _auth.auth, wishlistController.add); // route to remove from wishlist
 
-router.put('/remove', _auth.auth, wishlistController.remove);
+router.put('/remove', _auth.auth, wishlistController.remove); // route to view myWishlist
+
+router.get('/mywishlist', _auth.auth, wishlistController.mywishlist);
 var _default = router;
 exports["default"] = _default;

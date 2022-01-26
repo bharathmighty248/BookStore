@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.remove = exports.add = void 0;
+exports.remove = exports.mywishlist = exports.add = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -223,6 +223,57 @@ var remove = /*#__PURE__*/function () {
   return function remove(_x2) {
     return _ref2.apply(this, arguments);
   };
-}();
+}(); //My Wishlist
+
 
 exports.remove = remove;
+
+var mywishlist = /*#__PURE__*/function () {
+  var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(info) {
+    var userwishlist;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            _context3.next = 3;
+            return _wishlist["default"].findOne({
+              userId: info.userId
+            });
+
+          case 3:
+            userwishlist = _context3.sent;
+
+            if (!userwishlist) {
+              _context3.next = 8;
+              break;
+            }
+
+            return _context3.abrupt("return", userwishlist);
+
+          case 8:
+            return _context3.abrupt("return", false);
+
+          case 9:
+            _context3.next = 14;
+            break;
+
+          case 11:
+            _context3.prev = 11;
+            _context3.t0 = _context3["catch"](0);
+            throw _context3.t0;
+
+          case 14:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, null, [[0, 11]]);
+  }));
+
+  return function mywishlist(_x3) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
+exports.mywishlist = mywishlist;
