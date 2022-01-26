@@ -587,6 +587,52 @@
                     }
                 }
             }
+        },
+        "/wishlist/remove": {
+            "put": {
+                "tags": ["Remove from Wishlist"],
+                "description": "You unliked this book, Remove from your wishlist..",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Token for Authentication..! Please Enter a token along with bearer [bearer ]..",
+                        "schema": {
+                            "type": "string",
+                            "required": true
+                        }
+                    },
+                    {
+                        "in": "body",
+                        "name": "book info",
+                        "description": "Give book details",
+                        "schema": {
+                            "$ref": "#/definitions/wishlistinfo"
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "schema": {
+                    "$ref": "#/definitions/wishlistinfo"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Book removed from wishlist successfully"
+                    },
+                    "400": {
+                        "description": "Authorization token is required"
+                    },
+                    "401": {
+                        "description": "Authorization Failed"
+                    },
+                    "404": {
+                        "description": "Book not found in wishlist (or) Wishlist not available or empty"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
