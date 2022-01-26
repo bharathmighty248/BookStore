@@ -81,4 +81,54 @@ describe('Wishlist APIs Test', () => {
             });
         });
     });
+    describe("Remove from Wishlist Api",() => {
+      it("WhenGivenBookInfo_IfItIsNotAvailableInWishlist_ShouldReturnSame", (done) => {
+        const info = {
+          bookId: "61eae6b4f45107366c80a9bb"
+        };
+        const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczIwQGdtYWlsLmNvbSIsImlkIjoiNjFlN2JkY2QzOTBkZGQwOTk0ODhjNTVjIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE2NDI3NTcyMzV9.wc72Gbt4E5kT4eO64Rhz33EIGn8RKMO8KHVEs8BJims"
+        chai
+        .request(app)
+        .put('/api/v1/wishlist/remove')
+        .set({ authorization: token })
+        .send(info)
+        .end((err, res) => {
+            res.should.have.status(404);
+            res.body.should.have.property("message").eql("Book not found in wishlist");
+          done();
+        });
+      });
+      it("WhenGivenBookInfo_IfItIsAvailableInWishlist_ShouldReturnSuccessfull", (done) => {
+        const info = {
+          bookId: "61eae6b4f45107366c80a9ba"
+        };
+        const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczIwQGdtYWlsLmNvbSIsImlkIjoiNjFlN2JkY2QzOTBkZGQwOTk0ODhjNTVjIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE2NDI3NTcyMzV9.wc72Gbt4E5kT4eO64Rhz33EIGn8RKMO8KHVEs8BJims"
+        chai
+        .request(app)
+        .put('/api/v1/wishlist/remove')
+        .set({ authorization: token })
+        .send(info)
+        .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("message").eql("Book removed from wishlist successfully");
+          done();
+        });
+      });
+      it("WhenGivenBookInfo_IfWishlistisEmpty_ShouldReturnSame", (done) => {
+        const info = {
+          bookId: "61eae6b4f45107366c80a9ba"
+        };
+        const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczIwQGdtYWlsLmNvbSIsImlkIjoiNjFlN2JkY2QzOTBkZGQwOTk0ODhjNTVjIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE2NDI3NTcyMzV9.wc72Gbt4E5kT4eO64Rhz33EIGn8RKMO8KHVEs8BJims"
+        chai
+        .request(app)
+        .put('/api/v1/wishlist/remove')
+        .set({ authorization: token })
+        .send(info)
+        .end((err, res) => {
+            res.should.have.status(404);
+            res.body.should.have.property("message").eql("Wishlist not available or empty");
+          done();
+        });
+      });
+    });
 });
