@@ -1,5 +1,6 @@
 import HttpStatus from 'http-status-codes';
 import * as BookService from '../services/book.service';
+import * as redis from '../utils/redis';
 
 /**
  * Controller to Add book by Admin
@@ -79,6 +80,7 @@ export const updatebook = async (req, res, next) => {
             message: 'Book Not Found'
           });
     } else {
+        redis.clearCache(data.title);
         res.status(HttpStatus.OK).json({
             code: HttpStatus.OK,
             message: 'Book updated successfully'
@@ -99,6 +101,7 @@ export const deletebook = async (req, res, next) => {
   try {
     const data = await BookService.deletebook(req.params.bookId);
     if (data != null){
+        redis.clearCache(data.title);
         res.status(HttpStatus.OK).json({
             code: HttpStatus.OK,
             message: 'Book deleted successfully'
@@ -123,19 +126,32 @@ export const deletebook = async (req, res, next) => {
  export const searchbook = async (req, res, next) => {
   try {
     const info = req.params.title
-    const data = await BookService.searchbook(info);
-    if (data.length != 0) {
-        res.status(HttpStatus.OK).json({
-            code: HttpStatus.OK,
-            message: 'search results',
-            data
-        });
-    } else {
-      res.status(HttpStatus.NOT_FOUND).json({
-        code: HttpStatus.NOT_FOUND,
-        message: 'Book Not Found'
+    const cachevalue = await redis.redisBookbyTitle(info);
+    if(cachevalue) {
+      const data = JSON.parse(cachevalue);
+      res.status(HttpStatus.OK).json({
+        code: HttpStatus.OK,
+        message: 'search results',
+        data
       });
+    } else {
+      const data = await BookService.searchbook(info);
+      if (data.length != 0) {
+        redis.setData(info,JSON.stringify(data));
+        res.status(HttpStatus.OK).json({
+          code: HttpStatus.OK,
+          message: 'search results',
+          data
+        });
+      } else {
+        res.status(HttpStatus.NOT_FOUND).json({
+          code: HttpStatus.NOT_FOUND,
+          message: 'Book Not Found'
+        });
+      }
     }
+
+    
   } catch (error) {
     next(error);
   }

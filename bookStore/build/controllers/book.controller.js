@@ -17,6 +17,8 @@ var _httpStatusCodes = _interopRequireDefault(require("http-status-codes"));
 
 var BookService = _interopRequireWildcard(require("../services/book.service"));
 
+var redis = _interopRequireWildcard(require("../utils/redis"));
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -172,6 +174,7 @@ var updatebook = /*#__PURE__*/function () {
                 message: 'Book Not Found'
               });
             } else {
+              redis.clearCache(data.title);
               res.status(_httpStatusCodes["default"].OK).json({
                 code: _httpStatusCodes["default"].OK,
                 message: 'Book updated successfully'
@@ -223,6 +226,7 @@ var deletebook = /*#__PURE__*/function () {
             data = _context4.sent;
 
             if (data != null) {
+              redis.clearCache(data.title);
               res.status(_httpStatusCodes["default"].OK).json({
                 code: _httpStatusCodes["default"].OK,
                 message: 'Book deleted successfully'
@@ -266,7 +270,8 @@ exports.deletebook = deletebook;
 
 var searchbook = /*#__PURE__*/function () {
   var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res, next) {
-    var info, data;
+    var info, cachevalue, data, _data;
+
     return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
@@ -274,16 +279,38 @@ var searchbook = /*#__PURE__*/function () {
             _context5.prev = 0;
             info = req.params.title;
             _context5.next = 4;
-            return BookService.searchbook(info);
+            return redis.redisBookbyTitle(info);
 
           case 4:
-            data = _context5.sent;
+            cachevalue = _context5.sent;
 
-            if (data.length != 0) {
+            if (!cachevalue) {
+              _context5.next = 10;
+              break;
+            }
+
+            data = JSON.parse(cachevalue);
+            res.status(_httpStatusCodes["default"].OK).json({
+              code: _httpStatusCodes["default"].OK,
+              message: 'search results',
+              data: data
+            });
+            _context5.next = 14;
+            break;
+
+          case 10:
+            _context5.next = 12;
+            return BookService.searchbook(info);
+
+          case 12:
+            _data = _context5.sent;
+
+            if (_data.length != 0) {
+              redis.setData(info, JSON.stringify(_data));
               res.status(_httpStatusCodes["default"].OK).json({
                 code: _httpStatusCodes["default"].OK,
                 message: 'search results',
-                data: data
+                data: _data
               });
             } else {
               res.status(_httpStatusCodes["default"].NOT_FOUND).json({
@@ -292,20 +319,21 @@ var searchbook = /*#__PURE__*/function () {
               });
             }
 
-            _context5.next = 11;
+          case 14:
+            _context5.next = 19;
             break;
 
-          case 8:
-            _context5.prev = 8;
+          case 16:
+            _context5.prev = 16;
             _context5.t0 = _context5["catch"](0);
             next(_context5.t0);
 
-          case 11:
+          case 19:
           case "end":
             return _context5.stop();
         }
       }
-    }, _callee5, null, [[0, 8]]);
+    }, _callee5, null, [[0, 16]]);
   }));
 
   return function searchbook(_x13, _x14, _x15) {
