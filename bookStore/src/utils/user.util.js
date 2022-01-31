@@ -52,22 +52,19 @@ const transporter = nodemailer.createTransport({
  *
  * @param {object} details
  */
- export const sendOrderConfirmation = (details) => {
+ export const sendOrderConfirmation = (details,token) => {
+    const link = `http://localhost:${process.env.APP_PORT}/api/${process.env.API_VERSION}/carts/orderdetails/${token}`;
     transporter.sendMail({
         from: "'Book-Store'<bookstore-account@bookstore.com>",
         to: details.email,
         subject: "Order confirmation",
-        text: `Hello Happy Customer,
-        Thank you for shoping with us. Your order is placed successfully.
-        order Details:
-                        Email: ${details.email}
-                        Delivary address: ${details.address}
-                        Payment mode: ${details.paymentMode}
-                        ordered item(s): ${details.books}
-                        Order Total: Rs.${details.totalAmount}.00
-
-        We hope to see you again soon.
-        BOOKSTORE.In
-        `
+        text: `Hello Happy Customer,`,
+        html: `<h2>Your order placed successfully</h2>
+                <b>
+                <p>Thank you for shoping with us.</p>
+                <p>You can see your order details here: <button href="${link}"> <a href="${link}">Order details</a></button></p>
+                <p>We hope to see you again soon</p>
+                <p>BOOKSTORE.In</p>
+                </b>`
     });
   };

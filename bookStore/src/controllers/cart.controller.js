@@ -140,3 +140,24 @@ export const placeorder = async (req, res, next) => {
         next(error);
     }
 }
+
+/**
+ * Controller to view order details
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+ export const orderdetails = async (req, res, next) => {
+    try {
+        const info = {
+            token: req.params.token
+        }
+        const data = await CartService.orderdetails(info);
+        res.status(HttpStatus.OK).json({
+            message: 'Your Order details',
+            data
+        });
+    } catch (error) {
+      next(error);
+    }
+  };

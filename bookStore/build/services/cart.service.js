@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.viewcart = exports.removefromcart = exports.placeorder = exports.addtocart = void 0;
+exports.viewcart = exports.removefromcart = exports.placeorder = exports.orderdetails = exports.addtocart = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -15,7 +15,11 @@ var _cart = _interopRequireDefault(require("../models/cart.model"));
 
 var _book = _interopRequireDefault(require("../models/book.model"));
 
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
+
 var _user = require("../utils/user.util");
+
+var _rabbitmq = _interopRequireDefault(require("../utils/rabbitmq"));
 
 //Add To Cart
 var addtocart = /*#__PURE__*/function () {
@@ -652,7 +656,8 @@ exports.viewcart = viewcart;
 
 var placeorder = /*#__PURE__*/function () {
   var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(info) {
-    var usercart, books, cartdetails, orderdetails, newcart, totalAmount;
+    var usercart, books, cartdetails, _orderdetails, token, newcart, totalAmount;
+
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
@@ -667,7 +672,7 @@ var placeorder = /*#__PURE__*/function () {
             usercart = _context4.sent;
 
             if (!usercart) {
-              _context4.next = 24;
+              _context4.next = 26;
               break;
             }
 
@@ -692,15 +697,21 @@ var placeorder = /*#__PURE__*/function () {
 
           case 12:
             cartdetails = _context4.sent;
-            orderdetails = {
+            _orderdetails = {
               email: info.email,
               address: info.address,
               paymentMode: info.paymentmode,
               books: cartdetails.books,
               totalAmount: cartdetails.totalAmount
             };
-            (0, _user.sendOrderConfirmation)(orderdetails);
-            _context4.next = 17;
+            token = _jsonwebtoken["default"].sign({
+              email: _orderdetails.email
+            }, process.env.SECRET_KEY);
+
+            _rabbitmq["default"].publisher(_orderdetails, _orderdetails.email);
+
+            (0, _user.sendOrderConfirmation)(_orderdetails, token);
+            _context4.next = 19;
             return _cart["default"].findOneAndUpdate({
               userId: info.userId
             }, {
@@ -710,50 +721,98 @@ var placeorder = /*#__PURE__*/function () {
               "new": true
             });
 
-          case 17:
+          case 19:
             newcart = _context4.sent;
             totalAmount = newcart.books.map(function (book) {
               return book.total;
             }).reduce(function (acc, curr) {
               return acc + curr;
             }, 0);
-            _context4.next = 21;
+            _context4.next = 23;
             return _cart["default"].findOneAndUpdate({
               userId: info.userId
             }, {
               totalAmount: totalAmount
             });
 
-          case 21:
+          case 23:
             return _context4.abrupt("return", true);
 
-          case 22:
-            _context4.next = 25;
+          case 24:
+            _context4.next = 27;
             break;
 
-          case 24:
+          case 26:
             return _context4.abrupt("return", "Cart not Found");
 
-          case 25:
-            _context4.next = 30;
+          case 27:
+            _context4.next = 32;
             break;
 
-          case 27:
-            _context4.prev = 27;
+          case 29:
+            _context4.prev = 29;
             _context4.t0 = _context4["catch"](0);
             throw _context4.t0;
 
-          case 30:
+          case 32:
           case "end":
             return _context4.stop();
         }
       }
-    }, _callee4, null, [[0, 27]]);
+    }, _callee4, null, [[0, 29]]);
   }));
 
   return function placeorder(_x4) {
     return _ref4.apply(this, arguments);
   };
-}();
+}(); // Order details
+
 
 exports.placeorder = placeorder;
+
+var orderdetails = /*#__PURE__*/function () {
+  var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(info) {
+    var decodedToken, data, details;
+    return _regenerator["default"].wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.prev = 0;
+            decodedToken = _jsonwebtoken["default"].verify(info.token, process.env.SECRET_KEY);
+
+            if (!decodedToken) {
+              _context5.next = 8;
+              break;
+            }
+
+            _context5.next = 5;
+            return _rabbitmq["default"].subscriber(decodedToken.email);
+
+          case 5:
+            data = _context5.sent;
+            details = JSON.parse(data);
+            return _context5.abrupt("return", details);
+
+          case 8:
+            _context5.next = 13;
+            break;
+
+          case 10:
+            _context5.prev = 10;
+            _context5.t0 = _context5["catch"](0);
+            throw _context5.t0;
+
+          case 13:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5, null, [[0, 10]]);
+  }));
+
+  return function orderdetails(_x5) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+
+exports.orderdetails = orderdetails;

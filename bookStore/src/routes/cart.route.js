@@ -16,4 +16,7 @@ router.get('/viewcart', auth, cartController.viewcart);
 // route to place order
 router.put('/placeorder', auth, cartController.placeorder);
 
+// route to see order details
+router.get('/orderdetails/:token', cartController.orderdetails);
+
 export default router;

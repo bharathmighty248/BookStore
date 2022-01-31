@@ -7,7 +7,7 @@ var _typeof = require("@babel/runtime/helpers/typeof");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.viewcart = exports.removefromcart = exports.placeorder = exports.addtocart = void 0;
+exports.viewcart = exports.removefromcart = exports.placeorder = exports.orderdetails = exports.addtocart = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -281,5 +281,55 @@ var placeorder = /*#__PURE__*/function () {
     return _ref4.apply(this, arguments);
   };
 }();
+/**
+ * Controller to view order details
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+
 
 exports.placeorder = placeorder;
+
+var orderdetails = /*#__PURE__*/function () {
+  var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res, next) {
+    var info, data;
+    return _regenerator["default"].wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.prev = 0;
+            info = {
+              token: req.params.token
+            };
+            _context5.next = 4;
+            return CartService.orderdetails(info);
+
+          case 4:
+            data = _context5.sent;
+            res.status(_httpStatusCodes["default"].OK).json({
+              message: 'Your Order details',
+              data: data
+            });
+            _context5.next = 11;
+            break;
+
+          case 8:
+            _context5.prev = 8;
+            _context5.t0 = _context5["catch"](0);
+            next(_context5.t0);
+
+          case 11:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5, null, [[0, 8]]);
+  }));
+
+  return function orderdetails(_x13, _x14, _x15) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+
+exports.orderdetails = orderdetails;

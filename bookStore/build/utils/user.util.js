@@ -73,12 +73,14 @@ var sendSuccessEmail = function sendSuccessEmail(details) {
 
 exports.sendSuccessEmail = sendSuccessEmail;
 
-var sendOrderConfirmation = function sendOrderConfirmation(details) {
+var sendOrderConfirmation = function sendOrderConfirmation(details, token) {
+  var link = "http://localhost:".concat(process.env.APP_PORT, "/api/").concat(process.env.API_VERSION, "/carts/orderdetails/").concat(token);
   transporter.sendMail({
     from: "'Book-Store'<bookstore-account@bookstore.com>",
     to: details.email,
     subject: "Order confirmation",
-    text: "Hello Happy Customer,\n        Thank you for shoping with us. Your order is placed successfully.\n        order Details:\n                        Email: ".concat(details.email, "\n                        Delivary address: ").concat(details.address, "\n                        Payment mode: ").concat(details.paymentMode, "\n                        ordered item(s): ").concat(details.books, "\n                        Order Total: Rs.").concat(details.totalAmount, ".00\n\n        We hope to see you again soon.\n        BOOKSTORE.In\n        ")
+    text: "Hello Happy Customer,",
+    html: "<h2>Your order placed successfully</h2>\n                <b>\n                <p>Thank you for shoping with us.</p>\n                <p>You can see your order details here: <button href=\"".concat(link, "\"> <a href=\"").concat(link, "\">Order details</a></button></p>\n                <p>We hope to see you again soon</p>\n                <p>BOOKSTORE.In</p>\n                </b>")
   });
 };
 

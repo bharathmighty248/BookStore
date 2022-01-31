@@ -1,6 +1,8 @@
 import Cart from '../models/cart.model';
 import Book from '../models/book.model';
+import jwt from 'jsonwebtoken';
 import { sendOrderConfirmation } from '../utils/user.util';
+import rabbitmq from '../utils/rabbitmq';
 
 //Add To Cart
 export const addtocart = async (info) => {
@@ -179,8 +181,10 @@ export const placeorder = async (info) => {
                     paymentMode: info.paymentmode,
                     books: cartdetails.books,
                     totalAmount: cartdetails.totalAmount
-                }
-                sendOrderConfirmation(orderdetails);
+                };
+                const token = jwt.sign({email:orderdetails.email},process.env.SECRET_KEY);
+                rabbitmq.publisher(orderdetails, orderdetails.email);
+                sendOrderConfirmation(orderdetails, token);
                 const newcart = await Cart.findOneAndUpdate({userId:info.userId},{isPurchased: false,books:[]},{ new: true});
                 const totalAmount = newcart.books.map((book) => book.total).reduce(((acc,curr) => acc+curr), 0);
                 await Cart.findOneAndUpdate({userId:info.userId},{totalAmount: totalAmount});
@@ -188,6 +192,20 @@ export const placeorder = async (info) => {
             }
         } else {
             return "Cart not Found";
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+// Order details
+export const orderdetails = async (info) => {
+    try {
+        const decodedToken = jwt.verify(info.token, process.env.SECRET_KEY);
+        if (decodedToken) {
+            const data = await rabbitmq.subscriber(decodedToken.email);
+            const details = JSON.parse(data);
+            return details;
         }
     } catch (error) {
         throw error;

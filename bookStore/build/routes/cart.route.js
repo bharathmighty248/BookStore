@@ -28,6 +28,8 @@ router.put('/removefromcart', _auth.auth, cartController.removefromcart); // rou
 
 router.get('/viewcart', _auth.auth, cartController.viewcart); // route to place order
 
-router.put('/placeorder', _auth.auth, cartController.placeorder);
+router.put('/placeorder', _auth.auth, cartController.placeorder); // route to see order details
+
+router.get('/orderdetails/:token', cartController.orderdetails);
 var _default = router;
 exports["default"] = _default;
