@@ -33,6 +33,7 @@ describe('Book APIs Test', () => {
   describe('Add Book Api', () => {
     it('GivenBookInfo_WhenTokenNotProvided_shouldReturnAuthorizationRequired', (done) => {
       const info = {
+        productImage: {},
         author: "bharath",
         title: "first book title",
         description: "first book description",
@@ -53,6 +54,7 @@ describe('Book APIs Test', () => {
     it('GivenBookInfo_WhenIncorrectTokenProvided_shouldReturnAuthorizationRequired', (done) => {
         const incorrecttoken = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJoYXJhdGhtaWdodHkyNDhAZ21haWwuY29tIiwiaWQiOiI2MWU2NWFkNjlhN2UxMjI4MTg0YTVjMjAiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2NDI1OTQzMDJ9.RTY6xd9qENkLsT491FktjwtQIA2YhN_ml0XmapfWQ0"
         const info = {
+          productImage: {},
           author: "bharath",
           title: "first book title",
           description: "first book description",
@@ -74,6 +76,7 @@ describe('Book APIs Test', () => {
     it('GivenBookInfo_WhenUserTokenProvided_shouldReturnAdminOnlyHasPermission', (done) => {
         const usertoken = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhanBvd2VyamVtczIwQGdtYWlsLmNvbSIsImlkIjoiNjFlN2JkY2QzOTBkZGQwOTk0ODhjNTVjIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE2NDI2MDA1MzN9.YVHUsRY9tMxA0a2oML-i_8l4r7gar-dtj_tieXHBFWs"
         const info = {
+          productImage: {},
           author: "bharath",
           title: "first book title",
           description: "first book description",

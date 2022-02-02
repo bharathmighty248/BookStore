@@ -43,6 +43,7 @@ var port = process.env.APP_PORT;
 var api_version = process.env.API_VERSION;
 app.use((0, _cors["default"])());
 app.use((0, _helmet["default"])());
+app.use('/uploads', _express["default"]["static"]('uploads'));
 app.use("/api/".concat(api_version, "/docs"), _swaggerUiExpress["default"].serve, _swaggerUiExpress["default"].setup(_swagger["default"]));
 app.use(_express["default"].urlencoded({
   extended: true

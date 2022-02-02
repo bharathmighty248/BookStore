@@ -38,6 +38,7 @@ var addbook = /*#__PURE__*/function () {
           case 0:
             _context.prev = 0;
             info = {
+              productImage: req.file,
               author: req.body.author,
               title: req.body.title,
               description: req.body.description,

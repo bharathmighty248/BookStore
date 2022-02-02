@@ -8,6 +8,9 @@ exports["default"] = void 0;
 var _mongoose = require("mongoose");
 
 var bookSchema = new _mongoose.Schema({
+  productImage: {
+    type: Object
+  },
   author: {
     type: String,
     required: true

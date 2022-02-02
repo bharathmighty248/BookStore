@@ -2,6 +2,9 @@ import { Schema, model } from 'mongoose';
 
 const bookSchema = new Schema(
   {
+    productImage: {
+        type: Object
+    },
     author: {
         type: String,
         required: true

@@ -194,18 +194,50 @@
                         }
                     },
                     {
-                        "name": "Add book",
-                        "in": "body",
-                        "description": "book details",
-                        "schema": {
-                            "$ref": "#/definitions/bookinfo"
-                        }
+                        "in": "formData",
+                        "name": "productImage",
+                        "description": "Upload the file",
+                        "type": "file",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "author",
+                        "description": "Author of the book",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "title",
+                        "description": "Title of the book",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "description",
+                        "description": "Description of the book",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "quantity",
+                        "description": "Quantity of the book",
+                        "type": "number",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "price",
+                        "description": "Price of the book",
+                        "type": "number",
+                        "required": true
                     }
+                    
                 ],
                 "produces": ["application/json"],
-                "schema": {
-                    "$ref": "#/definitions/bookinfo"
-                },
                 "responses": {
                     "201": {
                         "description": "Book added successfully"

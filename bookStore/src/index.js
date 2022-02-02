@@ -25,6 +25,7 @@ const api_version = process.env.API_VERSION;
 
 app.use(cors());
 app.use(helmet());
+app.use('/uploads', express.static('uploads'));
 app.use(`/api/${api_version}/docs`, swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

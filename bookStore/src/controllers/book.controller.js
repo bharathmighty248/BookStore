@@ -11,6 +11,7 @@ import * as redis from '../utils/redis';
 export const addbook = async (req, res, next) => {
   try {
     const info = {
+        productImage: req.file,
         author: req.body.author,
         title: req.body.title,
         description: req.body.description,
