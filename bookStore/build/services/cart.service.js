@@ -31,35 +31,44 @@ var addtocart = /*#__PURE__*/function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            _context.next = 3;
+
+            if (!(info.quantity <= 0 || info.quantity > 5)) {
+              _context.next = 5;
+              break;
+            }
+
+            return _context.abrupt("return", "Quantity issue");
+
+          case 5:
+            _context.next = 7;
             return _book["default"].findOne({
               _id: info.bookId,
               status: "Available"
             });
 
-          case 3:
+          case 7:
             available = _context.sent;
 
             if (!available) {
-              _context.next = 85;
+              _context.next = 89;
               break;
             }
 
-            _context.next = 7;
+            _context.next = 11;
             return _cart["default"].findOne({
               userId: info.userId
             });
 
-          case 7:
+          case 11:
             usercart = _context.sent;
 
             if (usercart) {
-              _context.next = 27;
+              _context.next = 31;
               break;
             }
 
             if (!(available.quantity >= info.quantity)) {
-              _context.next = 24;
+              _context.next = 28;
               break;
             }
 
@@ -76,11 +85,11 @@ var addtocart = /*#__PURE__*/function () {
             remainingqty = available.quantity - info.quantity;
 
             if (!(remainingqty == 0)) {
-              _context.next = 19;
+              _context.next = 23;
               break;
             }
 
-            _context.next = 16;
+            _context.next = 20;
             return _book["default"].findOneAndUpdate({
               _id: info.bookId
             }, {
@@ -88,48 +97,48 @@ var addtocart = /*#__PURE__*/function () {
               status: "sold out"
             });
 
-          case 16:
+          case 20:
             return _context.abrupt("return", true);
 
-          case 19:
-            _context.next = 21;
+          case 23:
+            _context.next = 25;
             return _book["default"].findOneAndUpdate({
               _id: info.bookId
             }, {
               quantity: remainingqty
             });
 
-          case 21:
+          case 25:
             return _context.abrupt("return", true);
 
-          case 22:
-            _context.next = 25;
+          case 26:
+            _context.next = 29;
             break;
 
-          case 24:
+          case 28:
             return _context.abrupt("return", "less stock");
 
-          case 25:
-            _context.next = 83;
+          case 29:
+            _context.next = 87;
             break;
 
-          case 27:
-            _context.next = 29;
+          case 31:
+            _context.next = 33;
             return _cart["default"].findOne({
               userId: info.userId,
               "books.bookId": info.bookId
             });
 
-          case 29:
+          case 33:
             bookpresent = _context.sent;
 
             if (!(bookpresent == null)) {
-              _context.next = 56;
+              _context.next = 60;
               break;
             }
 
             if (!(available.quantity >= info.quantity)) {
-              _context.next = 53;
+              _context.next = 57;
               break;
             }
 
@@ -138,7 +147,7 @@ var addtocart = /*#__PURE__*/function () {
               quantity: info.quantity,
               total: info.quantity * available.price
             };
-            _context.next = 35;
+            _context.next = 39;
             return _cart["default"].findOneAndUpdate({
               userId: info.userId
             }, {
@@ -147,35 +156,35 @@ var addtocart = /*#__PURE__*/function () {
               }
             });
 
-          case 35:
-            _context.next = 37;
+          case 39:
+            _context.next = 41;
             return _cart["default"].findOne({
               userId: info.userId
             });
 
-          case 37:
+          case 41:
             newcart = _context.sent;
             totalAmount = newcart.books.map(function (book) {
               return book.total;
             }).reduce(function (acc, curr) {
               return acc + curr;
             });
-            _context.next = 41;
+            _context.next = 45;
             return _cart["default"].findOneAndUpdate({
               userId: info.userId
             }, {
               totalAmount: totalAmount
             });
 
-          case 41:
+          case 45:
             _remainingqty = available.quantity - info.quantity;
 
             if (!(_remainingqty == 0)) {
-              _context.next = 48;
+              _context.next = 52;
               break;
             }
 
-            _context.next = 45;
+            _context.next = 49;
             return _book["default"].findOneAndUpdate({
               _id: info.bookId
             }, {
@@ -183,34 +192,34 @@ var addtocart = /*#__PURE__*/function () {
               status: "sold out"
             });
 
-          case 45:
+          case 49:
             return _context.abrupt("return", true);
 
-          case 48:
-            _context.next = 50;
+          case 52:
+            _context.next = 54;
             return _book["default"].findOneAndUpdate({
               _id: info.bookId
             }, {
               quantity: _remainingqty
             });
 
-          case 50:
+          case 54:
             return _context.abrupt("return", true);
 
-          case 51:
-            _context.next = 54;
+          case 55:
+            _context.next = 58;
             break;
 
-          case 53:
+          case 57:
             return _context.abrupt("return", "less stock");
 
-          case 54:
-            _context.next = 83;
+          case 58:
+            _context.next = 87;
             break;
 
-          case 56:
+          case 60:
             if (!(available.quantity >= info.quantity)) {
-              _context.next = 82;
+              _context.next = 86;
               break;
             }
 
@@ -218,7 +227,7 @@ var addtocart = /*#__PURE__*/function () {
               return book.bookId == info.bookId;
             })[0].quantity;
             newqty = oldqty + info.quantity;
-            _context.next = 61;
+            _context.next = 65;
             return _cart["default"].updateOne({
               userId: info.userId
             }, {
@@ -229,13 +238,13 @@ var addtocart = /*#__PURE__*/function () {
               }
             });
 
-          case 61:
+          case 65:
             _newbook = {
               bookId: info.bookId,
               quantity: newqty,
               total: newqty * available.price
             };
-            _context.next = 64;
+            _context.next = 68;
             return _cart["default"].findOneAndUpdate({
               userId: info.userId
             }, {
@@ -244,35 +253,35 @@ var addtocart = /*#__PURE__*/function () {
               }
             });
 
-          case 64:
-            _context.next = 66;
+          case 68:
+            _context.next = 70;
             return _cart["default"].findOne({
               userId: info.userId
             });
 
-          case 66:
+          case 70:
             _newcart = _context.sent;
             _totalAmount = _newcart.books.map(function (book) {
               return book.total;
             }).reduce(function (acc, curr) {
               return acc + curr;
             });
-            _context.next = 70;
+            _context.next = 74;
             return _cart["default"].findOneAndUpdate({
               userId: info.userId
             }, {
               totalAmount: _totalAmount
             });
 
-          case 70:
+          case 74:
             _remainingqty2 = available.quantity - info.quantity;
 
             if (!(_remainingqty2 == 0)) {
-              _context.next = 77;
+              _context.next = 81;
               break;
             }
 
-            _context.next = 74;
+            _context.next = 78;
             return _book["default"].findOneAndUpdate({
               _id: info.bookId
             }, {
@@ -280,49 +289,49 @@ var addtocart = /*#__PURE__*/function () {
               status: "sold out"
             });
 
-          case 74:
+          case 78:
             return _context.abrupt("return", true);
 
-          case 77:
-            _context.next = 79;
+          case 81:
+            _context.next = 83;
             return _book["default"].findOneAndUpdate({
               _id: info.bookId
             }, {
               quantity: _remainingqty2
             });
 
-          case 79:
+          case 83:
             return _context.abrupt("return", true);
 
-          case 80:
-            _context.next = 83;
+          case 84:
+            _context.next = 87;
             break;
-
-          case 82:
-            return _context.abrupt("return", "less stock");
-
-          case 83:
-            _context.next = 86;
-            break;
-
-          case 85:
-            return _context.abrupt("return", "Sold Out");
 
           case 86:
-            _context.next = 91;
+            return _context.abrupt("return", "less stock");
+
+          case 87:
+            _context.next = 90;
             break;
 
-          case 88:
-            _context.prev = 88;
+          case 89:
+            return _context.abrupt("return", "Sold Out");
+
+          case 90:
+            _context.next = 95;
+            break;
+
+          case 92:
+            _context.prev = 92;
             _context.t0 = _context["catch"](0);
             throw _context.t0;
 
-          case 91:
+          case 95:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 88]]);
+    }, _callee, null, [[0, 92]]);
   }));
 
   return function addtocart(_x) {

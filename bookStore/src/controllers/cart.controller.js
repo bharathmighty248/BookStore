@@ -30,6 +30,11 @@ export const addtocart = async (req, res, next) => {
             code: HttpStatus.OK,
             message: 'stock is not available, please reduce order quantity'
         });
+    } else if (data == "Quantity issue") {
+        res.status(HttpStatus.BAD_REQUEST).json({
+            code: HttpStatus.BAD_REQUEST,
+            message: 'Quantity sholud be min 1 and max 5'
+        });
     }
   } catch (error) {
     next(error);

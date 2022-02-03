@@ -61,6 +61,11 @@ var addtocart = /*#__PURE__*/function () {
                 code: _httpStatusCodes["default"].OK,
                 message: 'stock is not available, please reduce order quantity'
               });
+            } else if (data == "Quantity issue") {
+              res.status(_httpStatusCodes["default"].BAD_REQUEST).json({
+                code: _httpStatusCodes["default"].BAD_REQUEST,
+                message: 'Quantity sholud be min 1 and max 5'
+              });
             }
 
             _context.next = 11;
