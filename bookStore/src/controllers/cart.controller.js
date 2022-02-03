@@ -33,7 +33,7 @@ export const addtocart = async (req, res, next) => {
     } else if (data == "Quantity issue") {
         res.status(HttpStatus.BAD_REQUEST).json({
             code: HttpStatus.BAD_REQUEST,
-            message: 'Quantity sholud be min 1 and max 5'
+            message: 'Quantity sholud be min 1 & max 5'
         });
     }
   } catch (error) {

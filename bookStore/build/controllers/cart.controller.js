@@ -64,7 +64,7 @@ var addtocart = /*#__PURE__*/function () {
             } else if (data == "Quantity issue") {
               res.status(_httpStatusCodes["default"].BAD_REQUEST).json({
                 code: _httpStatusCodes["default"].BAD_REQUEST,
-                message: 'Quantity sholud be min 1 and max 5'
+                message: 'Quantity sholud be min 1 & max 5'
               });
             }
 
