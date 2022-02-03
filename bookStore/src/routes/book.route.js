@@ -1,16 +1,7 @@
 import express from 'express';
 import * as bookController from '../controllers/book.controller';
 import { auth, verifyRole } from '../middlewares/auth.middleware';
-import multer from 'multer';
-
-// const storage = multer.diskStorage({
-//     destination: 'uploads',
-//     filename: function(req, file, cb) {
-//         cb(null, new Date().toISOString() + file.originalname);
-//     }
-// });
-
-const upload = multer({dest: 'uploads/'});
+import { upload } from '../middlewares/image.middleware';
 
 const router = express.Router();
 
